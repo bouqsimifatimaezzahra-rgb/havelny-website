@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Havenly – Admin Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Inter',sans-serif; background:#f9f2e7; padding:2rem; }
+        .container { max-width:900px; margin:0 auto; background:white; border-radius:1.5rem; padding:2rem; box-shadow:0 8px 28px rgba(0,0,0,0.1); }
+        h1 { color:#c17a5e; margin-bottom:1rem; }
+        .form-group { margin-bottom:1rem; }
+        label { display:block; font-weight:600; margin-bottom:0.3rem; }
+        input, select, textarea { width:100%; padding:0.7rem; border:1px solid #e5d5c5; border-radius:0.8rem; }
+        .btn { background:#c17a5e; color:white; border:none; padding:0.7rem 1.5rem; border-radius:2rem; cursor:pointer; margin-top:0.5rem; }
+        .product-list { margin-top:2rem; border-top:2px solid #e5d5c5; padding-top:1rem; }
+        .product-item { display:flex; justify-content:space-between; align-items:center; background:#faf3ea; margin:0.5rem 0; padding:0.8rem; border-radius:0.8rem; }
+        .delete-btn { background:#c17a5e; border:none; padding:0.3rem 0.8rem; border-radius:2rem; color:white; cursor:pointer; }
+        .logout { float:right; background:#7b8a5c; color:white; padding:0.3rem 1rem; border-radius:2rem; text-decoration:none; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a href="login.html" class="logout">Logout</a>
+    <a href="orders.html" class="btn" style="background:#7b8a5c;"><i class="fas fa-clipboard-list"></i> View Orders</a>
+    <h1><i class="fas fa-plus-circle"></i> Add new furniture piece</h1>
+    <form id="addProductForm">
+        <div class="form-group"><label>Name</label><input type="text" id="prodName" required></div>
+        <div style="display:flex; gap:1rem;"><div class="form-group" style="flex:1"><label>Category</label><select id="prodCategory"><option value="sofa">Sofa</option><option value="chair">Chair</option><option value="table">Table</option><option value="bed">Bed</option><option value="storage">Storage</option><option value="lighting">Lighting</option><option value="decor">Decor</option></select></div><div class="form-group" style="flex:1"><label>Price ($)</label><input type="number" id="prodPrice" required></div></div>
+        <div class="form-group"><label>Image URL</label><input type="text" id="prodImage" placeholder="https://..."></div>
+        <div style="display:flex; gap:1rem;"><div class="form-group" style="flex:1"><label>Colors (comma separated)</label><input type="text" id="prodColors" placeholder="Terracotta, Olive, Sand"></div><div class="form-group" style="flex:1"><label>Sizes (comma)</label><input type="text" id="prodSizes" placeholder="180cm,200cm"></div></div>
+        <button type="submit" class="btn">➕ Add product</button>
+    </form>
+    <div class="product-list"><h3>Custom products added</h3><div id="customList"></div></div>
+</div>
+<!-- ====== UNIVERSAL NAVIGATION BAR ====== -->
+<!-- Paste this right after the opening <body> tag on every page -->
+
+<nav style="
+    background: #c17a5e;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+">
+    <div style="font-weight: 800; font-size: 1.2rem; display: flex; align-items: center; gap: 0.5rem;">
+        <a href="index.html" style="color: white; text-decoration: none;">🏠 Havenly</a>
+    </div>
+    <div style="display: flex; gap: 0.8rem; flex-wrap: wrap; align-items: center;">
+        <a href="index.html" style="color: white; text-decoration: none; font-size: 0.9rem;">Shop</a>
+        <a href="orders.html" style="color: white; text-decoration: none; font-size: 0.9rem;">Orders</a>
+        <a href="add-product.html" style="color: white; text-decoration: none; font-size: 0.9rem;">+ Add</a>
+        <a href="checkout.html" style="color: white; text-decoration: none; font-size: 0.9rem;">🛒 Checkout</a>
+        <a href="login.html" style="color: white; text-decoration: none; font-size: 0.9rem; background: rgba(255,255,255,0.2); padding: 0.2rem 0.8rem; border-radius: 2rem;">Login</a>
+    </div>
+</nav>
+<script>
+    let customProducts = JSON.parse(localStorage.getItem('havenly_custom_products')) || [];
+    function renderCustomList() { let container = document.getElementById('customList'); if(customProducts.length===0){ container.innerHTML='<p>No custom items yet.</p>'; return; } container.innerHTML = customProducts.map(p => `<div class="product-item"><span><strong>${p.name}</strong> – $${p.price} (${p.category})<br><small>Colors: ${p.availableColors.join(', ')} | Sizes: ${p.availableSizes.join(', ')}</small></span><button class="delete-btn" data-id="${p.id}">Delete</button></div>`).join(''); document.querySelectorAll('.delete-btn').forEach(btn=>btn.addEventListener('click',()=>{ let id=parseInt(btn.dataset.id); customProducts=customProducts.filter(p=>p.id!==id); localStorage.setItem('havenly_custom_products',JSON.stringify(customProducts)); renderCustomList(); })); }
+    document.getElementById('addProductForm').addEventListener('submit',(e)=>{ e.preventDefault(); let name=document.getElementById('prodName').value; let category=document.getElementById('prodCategory').value; let price=parseFloat(document.getElementById('prodPrice').value); let img=document.getElementById('prodImage').value||'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop'; let colors=document.getElementById('prodColors').value.split(',').map(c=>c.trim()).filter(c=>c); let sizes=document.getElementById('prodSizes').value.split(',').map(s=>s.trim()).filter(s=>s); if(!name||isNaN(price)) return alert('Fill name and price'); let newId = customProducts.length?Math.max(...customProducts.map(p=>p.id))+1:1000; customProducts.push({ id:newId, name, category, price, img, availableColors:colors.length?colors:['Default'], availableSizes:sizes.length?sizes:['Standard'], rating:4.5, reviews:0, badge:'new' }); localStorage.setItem('havenly_custom_products',JSON.stringify(customProducts)); renderCustomList(); document.getElementById('addProductForm').reset(); alert('Product added! Refresh main page to see it.'); });
+    renderCustomList();
+    // Check manager login
+    if(localStorage.getItem('manager_logged')!=='true'){ alert('Please login as manager first'); window.location.href='login.html'; }
+</script>
+</body>
+</html>

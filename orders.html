@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Havenly – Order Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        :root { --clay:#c17a5e; --clay-dark:#9e5e45; --sand:#f9f2e7; --text-deep:#3b2a1f; --olive:#7b8a5c; --cream:#fffaf3; --shadow:0 8px 24px rgba(0,0,0,0.08); --radius:16px; }
+        body { font-family:'Inter',sans-serif; background:var(--sand); color:var(--text-deep); padding:1rem; }
+        .container { max-width:1400px; margin:0 auto; }
+        .header { background:#c17a5e; color:white; padding:1rem 1.5rem; display:flex; justify-content:space-between; align-items:center; border-radius:var(--radius) var(--radius) 0 0; }
+        .header h1 { font-size:1.5rem; margin:0; }
+        .header a { color:white; background:rgba(255,255,255,0.2); padding:0.4rem 1rem; border-radius:2rem; text-decoration:none; font-weight:600; }
+        .stats { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px,1fr)); gap:1.2rem; margin:1.5rem 0; }
+        .stat-card { background:white; padding:1rem; border-radius:var(--radius); box-shadow:var(--shadow); text-align:center; }
+        .stat-card .number { font-size:1.8rem; font-weight:800; color:var(--clay); }
+        .stat-card .label { font-size:0.8rem; color:#6b4f3a; }
+        .orders-container { background:white; border-radius:0 0 var(--radius) var(--radius); box-shadow:var(--shadow); overflow:hidden; }
+        .orders-table { width:100%; border-collapse:collapse; }
+        .orders-table th { background:#f4ede5; padding:0.8rem; text-align:left; font-weight:700; font-size:0.75rem; color:#6b4f3a; text-transform:uppercase; }
+        .orders-table td { padding:0.8rem; border-bottom:1px solid #f0e3d6; vertical-align:middle; }
+        .order-row { cursor:pointer; transition:0.2s; }
+        .order-row.expanded { background:#f4ede5; }
+        .order-status { display:inline-block; padding:0.2rem 0.8rem; border-radius:30px; font-size:0.7rem; font-weight:700; }
+        .status-paid { background:#d4edda; color:#155724; }
+        .status-pending { background:#fff3cd; color:#856404; }
+        .status-shipped { background:#cce5ff; color:#004085; }
+        .status-delivered { background:#d1ecf1; color:#0c5460; }
+        .order-details { display:none; padding:1rem 2rem; background:#faf5ee; }
+        .order-details.open { display:block; }
+        .order-items { display:grid; grid-template-columns:repeat(auto-fill, minmax(240px,1fr)); gap:0.8rem; }
+        .order-item { background:white; padding:0.8rem; border-radius:12px; border:1px solid #e5d5c5; }
+        .order-item .item-name { font-weight:700; }
+        .order-item .item-meta { font-size:0.75rem; color:#6b4f3a; display:flex; flex-wrap:wrap; gap:0.3rem; }
+        .order-item .item-meta span { background:#f0e2cf; padding:0.1rem 0.6rem; border-radius:20px; }
+        .order-item .item-price { font-weight:700; color:var(--clay-dark); }
+        .btn { background:var(--clay); color:white; border:none; padding:0.3rem 0.8rem; border-radius:2rem; font-weight:600; cursor:pointer; font-size:0.7rem; }
+        .btn-outline { background:transparent; border:2px solid var(--clay); color:var(--clay); }
+        .btn-danger { background:#c62828; }
+        .btn-danger:hover { background:#b71c1c; }
+        .empty-state { text-align:center; padding:3rem; color:#6b4f3a; }
+        .empty-state i { font-size:3rem; color:#e5d5c5; }
+        .back-link { display:inline-block; margin-top:1rem; color:var(--clay); text-decoration:none; font-weight:600; }
+        @media (max-width:768px) { .orders-table { font-size:0.75rem; } .header h1 { font-size:1.2rem; } }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Header: only Add Product link -->
+    <div class="header">
+        <h1><i class="fas fa-clipboard-list"></i> Orders</h1>
+        <a href="add-product.html"><i class="fas fa-plus"></i> Add Product</a>
+    </div>
+
+    <div class="stats">
+        <div class="stat-card"><div class="number" id="totalOrders">0</div><div class="label">Total Orders</div></div>
+        <div class="stat-card"><div class="number" id="totalRevenue">$0</div><div class="label">Revenue</div></div>
+        <div class="stat-card"><div class="number" id="totalItems">0</div><div class="label">Items Sold</div></div>
+        <div class="stat-card"><div class="number" id="uniqueCustomers">0</div><div class="label">Customers</div></div>
+    </div>
+
+    <div class="orders-container">
+        <table class="orders-table">
+            <thead><tr><th>Order #</th><th>Customer</th><th>Date</th><th>Items</th><th>Total</th><th>Status</th></tr></thead>
+            <tbody id="ordersBody"></tbody>
+        </table>
+    </div>
+    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Shop</a>
+</div>
+
+<script>
+    let orders = JSON.parse(localStorage.getItem('havenly_orders')) || [];
+
+    function formatDate(d) { try { return new Date(d).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric',hour:'2-digit',minute:'2-digit'}); } catch { return d; } }
+
+    function renderOrders() {
+        const tbody = document.getElementById('ordersBody');
+        if (orders.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><i class="fas fa-shopping-bag"></i><h3>No orders yet</h3></div></td></tr>`;
+            updateStats(); return;
+        }
+        const sorted = [...orders].sort((a,b) => new Date(b.orderDate) - new Date(a.orderDate));
+        tbody.innerHTML = sorted.map((order, index) => {
+            const statusClass = order.status === 'paid' ? 'status-paid' : order.status === 'shipped' ? 'status-shipped' : 'status-pending';
+            const itemCount = order.items.reduce((s,i) => s + i.qty, 0);
+            const total = order.total || order.items.reduce((s,i) => s + i.price*i.qty, 0);
+            return `
+                <tr class="order-row" data-index="${index}">
+                    <td><strong>#${String(order.id || index+1).padStart(4,'0')}</strong></td>
+                    <td>${order.customerName || 'Guest'}<br><small>${order.customerEmail || '—'}</small></td>
+                    <td>${formatDate(order.orderDate)}</td>
+                    <td>${itemCount}</td>
+                    <td>$${total.toFixed(2)}</td>
+                    <td><span class="order-status ${statusClass}">${(order.status || 'pending').charAt(0).toUpperCase()+order.status.slice(1)}</span></td>
+                </tr>
+                <tr class="order-details" id="details-${index}">
+                    <td colspan="6">
+                        <h4>Items</h4>
+                        <div class="order-items">
+                            ${order.items.map(item => `
+                                <div class="order-item">
+                                    <div class="item-name">${item.name}</div>
+                                    <div class="item-meta">
+                                        <span>Color: ${item.selectedColor || '—'}</span>
+                                        <span>Size: ${item.selectedSize || '—'}</span>
+                                        ${item.customHeight ? `<span>Height: ${item.customHeight}</span>` : ''}
+                                        ${item.orderDate ? `<span>Delivery: ${formatDate(item.orderDate)}</span>` : ''}
+                                        <span>Qty: ${item.qty}</span>
+                                    </div>
+                                    <div class="item-price">$${(item.price * item.qty).toFixed(2)}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        ${order.notes ? `<p style="margin-top:0.8rem;">📝 ${order.notes}</p>` : ''}
+                        <div style="margin-top:0.8rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
+                            <button class="btn btn-outline update-status" data-order-id="${order.id}" data-status="shipped">Mark Shipped</button>
+                            <button class="btn btn-outline update-status" data-order-id="${order.id}" data-status="delivered">Mark Delivered</button>
+                            <button class="btn btn-danger delete-order" data-order-id="${order.id}">Delete Order</button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+
+        // Toggle details
+        document.querySelectorAll('.order-row').forEach(row => {
+            row.addEventListener('click', function(e) {
+                if (e.target.closest('button')) return;
+                const idx = this.dataset.index;
+                const details = document.getElementById(`details-${idx}`);
+                if (details) {
+                    details.classList.toggle('open');
+                    this.classList.toggle('expanded');
+                }
+            });
+        });
+
+        // Update status
+        document.querySelectorAll('.update-status').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const id = this.dataset.orderId;
+                const newStatus = this.dataset.status;
+                const order = orders.find(o => o.id == id);
+                if (order) { order.status = newStatus; localStorage.setItem('havenly_orders', JSON.stringify(orders)); renderOrders(); }
+            });
+        });
+
+        // Delete
+        document.querySelectorAll('.delete-order').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (!confirm('Delete this order?')) return;
+                const id = this.dataset.orderId;
+                orders = orders.filter(o => o.id != id);
+                localStorage.setItem('havenly_orders', JSON.stringify(orders));
+                renderOrders();
+            });
+        });
+        updateStats();
+    }
+
+    function updateStats() {
+        document.getElementById('totalOrders').innerText = orders.length;
+        const revenue = orders.reduce((s,o) => s + (o.total || o.items.reduce((sum,i) => sum + i.price*i.qty, 0)), 0);
+        document.getElementById('totalRevenue').innerText = '$' + revenue.toFixed(2);
+        const items = orders.reduce((s,o) => s + o.items.reduce((sum,i) => sum + i.qty, 0), 0);
+        document.getElementById('totalItems').innerText = items;
+        const customers = new Set(orders.map(o => o.customerEmail || 'guest')).size;
+        document.getElementById('uniqueCustomers').innerText = customers;
+    }
+
+    renderOrders();
+</script>
+</body>
+</html>

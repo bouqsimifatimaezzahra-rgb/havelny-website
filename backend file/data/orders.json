@@ -1,0 +1,46 @@
+[
+  {
+    "id": 1,
+    "customerName": "John Doe",
+    "customerEmail": "john.doe@example.com",
+    "orderDate": "2026-06-19T11:20:00.000Z",
+    "items": [
+      {
+        "name": "Nordic Bouclé Armchair",
+        "price": 320.0,
+        "qty": 1,
+        "selectedColor": "Cream",
+        "selectedSize": "Standard"
+      }
+    ],
+    "total": 320.0,
+    "paymentMethod": "Credit Card",
+    "paymentStatus": "Paid",
+    "status": "pending",
+    "deliveryInfo": "123 Maple Street, Apt 4B, New York, NY 10001",
+    "notes": "Please leave with front doorman if not home.",
+    "userId": 2
+  },
+  {
+    "id": 2,
+    "customerName": "Sarah Jenkins",
+    "customerEmail": "sarah.j@example.com",
+    "orderDate": "2026-06-20T15:45:30.000Z",
+    "items": [
+      {
+        "name": "Velvet Earth Sofa",
+        "price": 481.0,
+        "qty": 1,
+        "selectedColor": "Olive",
+        "selectedSize": "200cm"
+      }
+    ],
+    "total": 481.0,
+    "paymentMethod": "cod",
+    "paymentStatus": "Pending",
+    "status": "shipped",
+    "deliveryInfo": "742 Evergreen Terrace, Springfield",
+    "notes": "Call 555-0199 upon arrival.",
+    "userId": null
+  }
+]

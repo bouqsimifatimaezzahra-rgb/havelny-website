@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "name": "Robert Vance",
+    "email": "vance@refrigeration.com",
+    "message": "Hello, do you offer bulk corporate discounting architectures if we outfit an entire floor layout with your earth sofa collection?",
+    "status": "unread",
+    "created": "2026-06-21T09:12:44.000Z"
+  },
+  {
+    "id": 2,
+    "name": "Alice Smith",
+    "email": "alice@example.com",
+    "message": "Just wanted to say that the armchair arrived yesterday and the packaging quality was absolutely stellar. Thank you Havenly team!",
+    "status": "read",
+    "created": "2026-06-18T14:02:11.000Z"
+  }
+]

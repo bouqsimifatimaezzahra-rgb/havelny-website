@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Havenly – Secure Checkout</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Inter',sans-serif; background:#f9f2e7; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:1rem; }
+        .checkout-card { max-width:520px; width:100%; background:white; border-radius:1.5rem; box-shadow:0 8px 28px rgba(0,0,0,0.1); overflow:hidden; }
+        .checkout-header { background:#c17a5e; color:white; padding:1.2rem 1.5rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; }
+        .checkout-header h2 { font-size:1.3rem; }
+        .checkout-header a { color:white; text-decoration:none; font-weight:600; font-size:0.8rem; background:rgba(255,255,255,0.2); padding:0.3rem 0.8rem; border-radius:2rem; }
+        .checkout-body { padding:1.5rem; }
+        .order-summary { background:#f9f2e7; padding:1rem; border-radius:0.8rem; margin-bottom:1.5rem; font-size:0.85rem; }
+        .summary-item { display:flex; justify-content:space-between; padding:0.3rem 0; border-bottom:1px solid #e1cfbe; }
+        .summary-total { font-weight:800; margin-top:0.8rem; padding-top:0.5rem; border-top:2px dashed #c1a78b; }
+        .customer-info { background:#f4ede5; border-radius:0.8rem; padding:0.8rem; margin-bottom:1rem; font-size:0.8rem; }
+        .payment-methods { margin-bottom:1.2rem; display:flex; flex-direction:column; gap:0.5rem; }
+        .payment-methods h4 { font-size:0.9rem; margin-bottom:0.2rem; color:#3b2a1f; }
+        .payment-option { display:flex; align-items:center; gap:0.5rem; background:#faf5ee; padding:0.5rem 0.8rem; border-radius:0.8rem; cursor:pointer; border:2px solid transparent; transition:0.2s; }
+        .payment-option:hover { background:#f4ede5; }
+        .payment-option.selected { border-color:#c17a5e; background:#f4ede5; }
+        .payment-option input[type="radio"] { width:18px; height:18px; accent-color:#c17a5e; cursor:pointer; margin:0; }
+        .payment-option .method-label { font-weight:600; font-size:0.85rem; display:flex; align-items:center; gap:0.5rem; }
+        .payment-option .method-label small { font-weight:400; color:#6b4f3a; font-size:0.7rem; }
+
+        /* Card details */
+        #cardDetails { background:#faf5ee; padding:1rem; border-radius:0.8rem; margin-bottom:1rem; border:1px solid #e5d5c5; }
+        #cardDetails.hidden { display:none; }
+
+        /* Delivery details (for COD & Bank Transfer) */
+        #deliveryDetails { background:#faf5ee; padding:1rem; border-radius:0.8rem; margin-bottom:1rem; border:1px solid #e5d5c5; }
+        #deliveryDetails.hidden { display:none; }
+
+        .form-group { margin-bottom:0.8rem; }
+        label { display:block; font-weight:600; font-size:0.8rem; margin-bottom:0.3rem; }
+        input, textarea { width:100%; padding:0.7rem; border:1px solid #ccd0d5; border-radius:0.6rem; outline:none; font-family:inherit; }
+        input:focus, textarea:focus { border-color:#c17a5e; }
+        .btn-pay { background:#7b8a5c; color:white; border:none; width:100%; padding:0.8rem; border-radius:2rem; font-weight:800; cursor:pointer; margin-top:0.5rem; }
+        .btn-pay:hover { background:#6a7a4c; }
+        .btn-cancel { background:#c62828; color:white; border:none; width:100%; padding:0.7rem; border-radius:2rem; font-weight:600; cursor:pointer; margin-top:0.5rem; }
+        .btn-cancel:hover { background:#b71c1c; }
+        .secure-badge { text-align:center; font-size:0.7rem; color:#606770; margin-top:1rem; }
+        .nav-links { display:flex; justify-content:center; gap:0.8rem; margin-top:1.5rem; flex-wrap:wrap; }
+        .nav-links a { background:#c17a5e; color:white; padding:0.4rem 1rem; border-radius:2rem; text-decoration:none; font-weight:600; font-size:0.75rem; display:inline-block; }
+        .nav-links a.outline { background:transparent; border:2px solid #c17a5e; color:#c17a5e; }
+        .notification { position:fixed; bottom:1rem; left:50%; transform:translateX(-50%); background:#2e7d32; color:white; padding:0.6rem 1.2rem; border-radius:2rem; opacity:0; transition:0.2s; z-index:100; }
+        @media (max-width:480px) { .checkout-body { padding:1rem; } }
+    </style>
+</head>
+<body>
+<div class="checkout-card">
+    <div class="checkout-header">
+        <h2><i class="fas fa-lock"></i> Checkout</h2>
+        <a href="index.html"><i class="fas fa-arrow-left"></i> Shop</a>
+    </div>
+    <div class="checkout-body">
+
+        <!-- Customer info (from login if available) -->
+        <div class="customer-info">
+            <strong>👤 Customer:</strong> <span id="customerNameDisplay">Guest</span> 
+            (<span id="customerEmailDisplay">—</span>)
+        </div>
+
+        <!-- Order summary -->
+        <div class="order-summary">
+            <h4>Your order</h4>
+            <div id="summaryItems"></div>
+            <div class="summary-total" id="summaryTotal"></div>
+        </div>
+
+        <!-- Payment Methods -->
+        <div class="payment-methods">
+            <h4><i class="fas fa-credit-card"></i> Payment Method</h4>
+            <label class="payment-option selected" id="opt-card">
+                <input type="radio" name="paymentMethod" value="card" checked>
+                <span class="method-label"><i class="fas fa-credit-card"></i> Credit Card <small>(instant)</small></span>
+            </label>
+            <label class="payment-option" id="opt-cod">
+                <input type="radio" name="paymentMethod" value="cod">
+                <span class="method-label"><i class="fas fa-truck"></i> Cash on Delivery <small>(pay after receiving)</small></span>
+            </label>
+            <label class="payment-option" id="opt-bank">
+                <input type="radio" name="paymentMethod" value="bank">
+                <span class="method-label"><i class="fas fa-university"></i> Bank Transfer <small>(pending)</small></span>
+            </label>
+        </div>
+
+        <!-- ===== CARD DETAILS (visible only for Credit Card) ===== -->
+        <div id="cardDetails">
+            <div class="form-group"><label>Full name on card</label><input type="text" id="cardName" placeholder="John Doe"></div>
+            <div class="form-group"><label>Card number</label><input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19"></div>
+            <div style="display:flex; gap:1rem;">
+                <div class="form-group" style="flex:1"><label>Expiry (MM/YY)</label><input type="text" id="cardExpiry" placeholder="12/28"></div>
+                <div class="form-group" style="flex:1"><label>CVV</label><input type="password" id="cardCVV" maxlength="4"></div>
+            </div>
+        </div>
+
+        <!-- ===== DELIVERY DETAILS (visible only for COD & Bank Transfer) ===== -->
+        <div id="deliveryDetails" class="hidden">
+            <h4 style="margin-bottom:0.8rem; color:#3b2a1f;"><i class="fas fa-shipping-fast"></i> Delivery Information</h4>
+            <div class="form-group"><label>Full Name</label><input type="text" id="deliveryName" placeholder="Your full name"></div>
+            <div class="form-group"><label>Phone Number</label><input type="tel" id="deliveryPhone" placeholder="+212 6 12 34 56 78"></div>
+            <div class="form-group"><label>Delivery Address</label><textarea id="deliveryAddress" rows="3" placeholder="Street, city, postal code..."></textarea></div>
+        </div>
+
+        <button class="btn-pay" id="placeOrderBtn"><i class="fas fa-shield-alt"></i> Place Order</button>
+        <button class="btn-cancel" id="cancelBtn"><i class="fas fa-times"></i> Cancel & Return to Shop</button>
+
+        <div class="secure-badge"><i class="fas fa-lock"></i> 256-bit SSL secure · Demo mode</div>
+
+        <!-- Navigation links -->
+        <div class="nav-links">
+            <a href="index.html" class="outline"><i class="fas fa-store"></i> Back to Shop</a>
+            <a href="add-product.html"><i class="fas fa-plus"></i> Add Product</a>
+        </div>
+    </div>
+</div>
+<div id="notification" class="notification"></div>
+
+<script>
+    // ----- Data -----
+    const cart = JSON.parse(localStorage.getItem('havenly_cart')) || [];
+    const currentCustomer = JSON.parse(localStorage.getItem('current_user')) || null;
+    const cardDetailsDiv = document.getElementById('cardDetails');
+    const deliveryDetailsDiv = document.getElementById('deliveryDetails');
+    const paymentRadios = document.querySelectorAll('input[name="paymentMethod"]');
+    const placeOrderBtn = document.getElementById('placeOrderBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+
+    // ----- Customer info -----
+    if (currentCustomer) {
+        document.getElementById('customerNameDisplay').innerText = currentCustomer.name || currentCustomer.username || 'Guest';
+        document.getElementById('customerEmailDisplay').innerText = currentCustomer.email || '—';
+    }
+
+    // ----- Toggle sections based on payment method -----
+    function toggleSections() {
+        const selected = document.querySelector('input[name="paymentMethod"]:checked');
+        if (!selected) return;
+        const value = selected.value;
+        if (value === 'card') {
+            cardDetailsDiv.classList.remove('hidden');
+            deliveryDetailsDiv.classList.add('hidden');
+            // Make card fields required
+            document.querySelectorAll('#cardDetails input').forEach(inp => inp.required = true);
+            document.querySelectorAll('#deliveryDetails input, #deliveryDetails textarea').forEach(inp => inp.required = false);
+        } else {
+            // COD or Bank Transfer – show delivery details
+            cardDetailsDiv.classList.add('hidden');
+            deliveryDetailsDiv.classList.remove('hidden');
+            document.querySelectorAll('#cardDetails input').forEach(inp => inp.required = false);
+            document.querySelectorAll('#deliveryDetails input, #deliveryDetails textarea').forEach(inp => inp.required = true);
+        }
+    }
+
+    paymentRadios.forEach(radio => radio.addEventListener('change', toggleSections));
+    toggleSections(); // initial state
+
+    // Highlight selected payment option
+    document.querySelectorAll('.payment-option').forEach(opt => {
+        opt.addEventListener('click', function() {
+            const radio = this.querySelector('input[type="radio"]');
+            if (radio) radio.checked = true;
+            document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected'));
+            this.classList.add('selected');
+            toggleSections();
+        });
+        const radio = opt.querySelector('input[type="radio"]');
+        if (radio) {
+            radio.addEventListener('change', function() {
+                document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected'));
+                if (this.checked) this.closest('.payment-option').classList.add('selected');
+            });
+        }
+    });
+
+    // ----- Order summary -----
+    function renderSummary() {
+        const container = document.getElementById('summaryItems');
+        const totalSpan = document.getElementById('summaryTotal');
+        if (cart.length === 0) {
+            container.innerHTML = '<p>Your cart is empty.</p>';
+            totalSpan.innerText = 'Total: $0.00';
+            return;
+        }
+        let itemsHtml = '', total = 0;
+        cart.forEach(i => {
+            const itemTotal = i.price * i.qty;
+            total += itemTotal;
+            itemsHtml += `<div class="summary-item">
+                <span>${i.name} x${i.qty}</span>
+                <span>$${itemTotal.toFixed(2)}</span>
+            </div>`;
+        });
+        container.innerHTML = itemsHtml;
+        totalSpan.innerHTML = `Total: $${total.toFixed(2)}`;
+    }
+    renderSummary();
+
+    // ----- Notification -----
+    function showMsg(msg, isErr = false) {
+        const n = document.getElementById('notification');
+        n.innerText = msg;
+        n.style.opacity = '1';
+        n.style.background = isErr ? '#c62828' : '#2e7d32';
+        setTimeout(() => n.style.opacity = '0', 3000);
+    }
+
+    // ----- Place Order -----
+    placeOrderBtn.addEventListener('click', function() {
+        if (cart.length === 0) {
+            showMsg('❌ Your cart is empty.', true);
+            return;
+        }
+
+        const method = document.querySelector('input[name="paymentMethod"]:checked').value;
+        const customerName = currentCustomer ? (currentCustomer.name || currentCustomer.username) : 'Guest';
+        const customerEmail = currentCustomer ? currentCustomer.email : 'guest@checkout.com';
+
+        let cardName = '', cardNumber = '', cardExpiry = '', cardCVV = '';
+        let deliveryName = '', deliveryPhone = '', deliveryAddress = '';
+
+        if (method === 'card') {
+            cardName = document.getElementById('cardName').value.trim();
+            cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+            cardExpiry = document.getElementById('cardExpiry').value;
+            cardCVV = document.getElementById('cardCVV').value;
+            if (!cardName || cardNumber.length < 13 || !cardExpiry.match(/^\d{2}\/\d{2}$/) || !cardCVV.match(/^\d{3,4}$/)) {
+                showMsg('❌ Please fill valid card details.', true);
+                return;
+            }
+        } else {
+            // COD or Bank Transfer – validate delivery fields
+            deliveryName = document.getElementById('deliveryName').value.trim();
+            deliveryPhone = document.getElementById('deliveryPhone').value.trim();
+            deliveryAddress = document.getElementById('deliveryAddress').value.trim();
+            if (!deliveryName || !deliveryPhone || !deliveryAddress) {
+                showMsg('❌ Please fill all delivery information fields.', true);
+                return;
+            }
+        }
+
+        const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+
+        // Build order object
+        const order = {
+            id: Date.now(),
+            customerName,
+            customerEmail,
+            orderDate: new Date().toISOString(),
+            paymentMethod: method === 'card' ? 'Credit Card' : method === 'cod' ? 'Cash on Delivery' : 'Bank Transfer',
+            paymentStatus: method === 'card' ? 'Paid' : 'Pending',
+            items: cart.map(item => ({
+                name: item.name, price: item.price, qty: item.qty,
+                selectedColor: item.selectedColor || '—',
+                selectedSize: item.selectedSize || '—',
+                customHeight: item.customHeight || null,
+                orderDate: item.orderDate || null,
+                notes: item.notes || null
+            })),
+            total,
+            status: method === 'card' ? 'paid' : 'pending',
+            notes: cart.map(i => i.notes).filter(n => n).join(' | ') || '',
+            // Include delivery info if not credit card
+            deliveryName: method !== 'card' ? deliveryName : undefined,
+            deliveryPhone: method !== 'card' ? deliveryPhone : undefined,
+            deliveryAddress: method !== 'card' ? deliveryAddress : undefined
+        };
+
+        // Save order
+        let orders = JSON.parse(localStorage.getItem('havenly_orders')) || [];
+        orders.push(order);
+        localStorage.setItem('havenly_orders', JSON.stringify(orders));
+
+        // Send email (demo)
+        const itemsText = cart.map(i => `${i.name} x${i.qty} = $${(i.price * i.qty).toFixed(2)}`).join('\n');
+        const paymentMsg = method === 'card' ? 'Paid by Credit Card' : method === 'cod' ? 'Cash on Delivery (pay on arrival)' : 'Bank Transfer (awaiting payment)';
+        let deliveryMsg = '';
+        if (method !== 'card') {
+            deliveryMsg = `\nDelivery Info:\nName: ${deliveryName}\nPhone: ${deliveryPhone}\nAddress: ${deliveryAddress}`;
+        }
+        fetch('https://formsubmit.co/ajax/youremail@gmail.com', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name: customerName,
+                email: customerEmail,
+                subject: '🪑 New Order from Havenly',
+                message: `Customer: ${customerName} (${customerEmail})\n\nPayment: ${paymentMsg}${deliveryMsg}\n\nItems:\n${itemsText}\n\nTotal: $${total.toFixed(2)}`,
+                _captcha: 'false'
+            })
+        }).catch(() => {});
+
+        showMsg('✅ Order placed! Redirecting...');
+        localStorage.removeItem('havenly_cart');
+        cart.length = 0;
+        renderSummary();
+
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 1500);
+    });
+
+    // ----- Cancel button -----
+    cancelBtn.addEventListener('click', function() {
+        if (cart.length > 0 && !confirm('Your cart will be cleared. Continue?')) return;
+        localStorage.removeItem('havenly_cart');
+        window.location.href = 'index.html';
+    });
+
+    // ----- Card formatting -----
+    document.getElementById('cardNumber').addEventListener('input', function(e) {
+        let v = e.target.value.replace(/\s/g, '');
+        if (v.length > 16) v = v.slice(0, 16);
+        let f = v.match(/.{1,4}/g)?.join(' ') || v;
+        e.target.value = f;
+    });
+    document.getElementById('cardExpiry').addEventListener('input', function(e) {
+        let v = e.target.value.replace(/\D/g, '');
+        if (v.length >= 2) v = v.slice(0, 2) + '/' + v.slice(2, 4);
+        e.target.value = v.slice(0, 5);
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "name": "Velvet Earth Sofa",
+    "category": "Seating",
+    "price": 481.0,
+    "oldPrice": 620.0,
+    "rating": 4.8,
+    "reviews": 378,
+    "badge": "New",
+    "img": "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop",
+    "availableColors": ["Terracotta", "Olive", "Sand"],
+    "availableSizes": ["180cm", "200cm", "240cm"],
+    "description": "Luxurious velvet sofa configured carefully around organic, earthy structural aesthetics."
+  }
+]

@@ -1,0 +1,122 @@
+/* Havenly Unified Design System */
+:root {
+  --primary: #c17a5e;
+  --primary-hover: #a8654c;
+  --bg-cream: #f9f2e7;
+  --text-dark: #2c2520;
+  --text-light: #70645c;
+  --white: #ffffff;
+  --success: #2e7d32;
+  --error: #d32f2f;
+  --border: #e6dfd5;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  background-color: var(--bg-cream);
+  color: var(--text-dark);
+  line-height: 1.6;
+}
+
+/* Navbar */
+.navbar {
+  background: var(--white);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.navbar .logo {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--primary);
+  text-decoration: none;
+}
+.nav-links a {
+  margin-left: 1.5rem;
+  text-decoration: none;
+  color: var(--text-dark);
+  font-weight: 600;
+}
+.nav-links a:hover { color: var(--primary); }
+
+/* Forms & Cards */
+.container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+.card {
+  background: var(--white);
+  padding: 2.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  max-width: 500px;
+  margin: 0 auto;
+}
+.form-group {
+  margin-bottom: 1.25rem;
+}
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--text-light);
+}
+.form-control {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  outline: none;
+}
+.form-control:focus { border-color: var(--primary); }
+
+/* Buttons & Feedback */
+.btn {
+  background: var(--primary);
+  color: var(--white);
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.btn:hover { background: var(--primary-hover); }
+.btn:disabled { background: #ccc; cursor: not-allowed; }
+
+.message {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  display: none;
+}
+.message.success { background: #e8f5e9; color: var(--success); display: block; }
+.message.error { background: #ffebee; color: var(--error); display: block; }
+
+/* Loading Spinner */
+.spinner {
+  display: inline-block;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 3px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
