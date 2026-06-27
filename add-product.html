@@ -1,163 +1,216 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Havenly – Add Product</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;600;700;800&display=swap" rel="stylesheet">
+    <title>إضافة منتج – بيتي على ذوقي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         * { margin:0; padding:0; box-sizing:border-box; }
-        :root { --clay: #c17a5e; --clay-dark: #9e5e45; --sand: #f9f2e7; --text-deep: #3b2a1f; --olive: #7b8a5c; --cream: #fffaf3; --shadow:0 8px 24px rgba(0,0,0,0.08); --radius:16px; }
-        body { font-family:'Inter',sans-serif; background:var(--sand); color:var(--text-deep); padding:1rem; }
-        .container { max-width:700px; margin:0 auto; background:white; border-radius:var(--radius); box-shadow:var(--shadow); padding:2rem; margin-top: 1.5rem; }
-        h1 { color:var(--clay); font-size:1.8rem; margin-bottom:0.5rem; }
-        .sub { color:#6b4f3a; font-size:0.9rem; margin-bottom:2rem; }
-        .form-group { margin-bottom:1.2rem; }
-        label { display:block; font-weight:600; margin-bottom:0.3rem; font-size:0.85rem; }
-        input, textarea, select { width:100%; padding:0.7rem 1rem; border:2px solid #e5d5c5; border-radius:1rem; font-family:inherit; font-size:0.9rem; background:white; }
-        input:focus, textarea:focus, select:focus { border-color:var(--clay); outline:none; box-shadow:0 0 0 3px rgba(193,122,94,0.15); }
-        .btn { background:var(--clay); color:white; border:none; padding:0.7rem 1.5rem; border-radius:2rem; font-weight:700; cursor:pointer; transition:0.2s; font-size:0.9rem; }
-        .btn:hover { background:var(--clay-dark); transform:translateY(-2px); }
-        .btn-block { width:100%; }
-        .btn-success { background:#2e7d32; }
-        .btn-success:hover { background:#1b5e20; }
-        .image-upload { border:2px dashed #e5d5c5; border-radius:1rem; padding:1.5rem; text-align:center; cursor:pointer; background:#faf5ee; position:relative; }
-        .image-upload input[type="file"] { position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; cursor:pointer; }
-        .image-upload .preview { max-width:100%; max-height:200px; border-radius:1rem; margin-top:0.5rem; display:none; }
-        .image-upload .preview.show { display:block; }
-        .message { margin-top:0.8rem; padding:0.8rem; border-radius:1rem; text-align:center; display:none; }
-        .message.error { display:block; background:#ffe7e7; color:#c62828; border:1px solid #ffc4c4; }
-        .message.success { display:block; background:#e6f4ea; color:#2e7d32; border:1px solid #c8e6c9; }
-        .back-links { margin-top:1.5rem; display:flex; gap:1.5rem; flex-wrap:wrap; }
-        .back-links a { color:var(--clay); text-decoration:none; font-weight:600; }
-        .back-links a:hover { text-decoration:underline; }
+        :root {
+            --blue: #4A7C9B;
+            --blue-light: #6A9EC0;
+            --blue-dark: #1A3B4C;
+            --warm-bg: #F8F0E3;
+            --white: #FFFFFF;
+            --text: #2C3E50;
+            --shadow: 0 8px 24px rgba(0,0,0,0.06);
+            --radius: 20px;
+        }
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: var(--warm-bg);
+            padding: 1.5rem;
+        }
+        .container {
+            max-width: 700px; margin: 0 auto;
+            background: white; border-radius: var(--radius);
+            padding: 2rem; box-shadow: var(--shadow);
+        }
+        h1 { color: var(--blue); font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .sub { color: #6b4f3a; margin-bottom: 2rem; }
+        .form-group { margin-bottom: 1.2rem; }
+        label { display: block; font-weight: 600; margin-bottom: 0.3rem; font-size: 0.85rem; }
+        input, textarea, select {
+            width: 100%; padding: 0.7rem 1rem;
+            border: 2px solid #e5d5c5; border-radius: 1rem;
+            font-family: inherit; font-size: 0.9rem;
+            background: white;
+        }
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--blue); outline: none;
+        }
+        .btn {
+            background: var(--blue); color: white; border: none;
+            padding: 0.7rem 1.5rem; border-radius: 2rem;
+            font-weight: 700; cursor: pointer; transition: 0.2s;
+            font-size: 0.9rem;
+        }
+        .btn:hover { background: var(--blue-dark); transform: translateY(-2px); }
+        .btn-block { width: 100%; }
+        .image-upload {
+            border: 2px dashed var(--blue-light); border-radius: 1rem;
+            padding: 1.5rem; text-align: center; cursor: pointer;
+            background: #faf5ee; position: relative;
+        }
+        .image-upload input[type="file"] {
+            position: absolute; top:0; left:0; width:100%; height:100%;
+            opacity:0; cursor:pointer;
+        }
+        .image-upload .preview {
+            max-width: 100%; max-height: 200px;
+            border-radius: 1rem; margin-top: 0.5rem; display: none;
+        }
+        .image-upload .preview.show { display: block; }
+        .message {
+            margin-top: 0.8rem; padding: 0.8rem; border-radius: 1rem;
+            text-align: center; display: none;
+        }
+        .message.error { display: block; background: #ffe7e7; color: #c62828; border: 1px solid #ffc4c4; }
+        .message.success { display: block; background: #e6f4ea; color: #2e7d32; border: 1px solid #c8e6c9; }
+        .back-links { margin-top: 1.5rem; display: flex; gap: 1.5rem; flex-wrap: wrap; }
+        .back-links a { color: var(--blue); text-decoration: none; font-weight: 600; }
+        .back-links a:hover { text-decoration: underline; }
+        .footer-note { font-size:0.7rem; color:#8b6f55; margin-top:0.3rem; }
     </style>
 </head>
 <body>
-
-<nav style="background:#c17a5e; color:white; padding:0.8rem 1.5rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; position:sticky; top:0; z-index:1000; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
-    <div style="font-weight:800; font-size:1.2rem;"><a href="index.html" style="color:white; text-decoration:none;">🏠 Havenly</a></div>
-    <div style="display:flex; gap:0.8rem; flex-wrap:wrap; align-items:center;">
-        <a href="index.html" style="color:white; text-decoration:none;">Shop</a>
-        <a href="add-product.html" style="color:white; text-decoration:none;">+ Add</a>
-        <a href="checkout.html" style="color:white; text-decoration:none;">🛒 Checkout</a>
-        <a href="login.html" style="color:white; text-decoration:none; background:rgba(255,255,255,0.2); padding:0.2rem 0.8rem; border-radius:2rem;">Login</a>
-    </div>
-</nav>
-
 <div class="container">
-    <h1><i class="fas fa-plus-circle"></i> Add New Product</h1>
-    <p class="sub">Fill in the details – the item will instantly sync to your shop database across all mobile devices.</p>
+    <h1><i class="fas fa-plus-circle"></i> إضافة منتج جديد</h1>
+    <p class="sub">املأ التفاصيل – سيظهر المنتج فوراً في المتجر.</p>
 
     <form id="addProductForm">
-        <div class="form-group"><label>Product Name *</label><input type="text" id="prodName" placeholder="e.g., Modern Oak Desk" required></div>
+        <div class="form-group"><label>اسم المنتج *</label><input type="text" id="prodName" placeholder="مثال: كنبة مخملية" required></div>
         <div style="display:flex; gap:1rem; flex-wrap:wrap;">
-            <div class="form-group" style="flex:1; min-width:150px;"><label>Category *</label><select id="prodCategory" required><option value="Sofa">Sofa</option><option value="Chair">Chair</option><option value="Table">Table</option><option value="Bed">Bed</option><option value="Storage">Storage</option><option value="Lighting">Lighting</option><option value="Decor">Decor</option></select></div>
-            <div class="form-group" style="flex:1; min-width:150px;"><label>Price ($) *</label><input type="number" id="prodPrice" placeholder="299" step="0.01" required></div>
+            <div class="form-group" style="flex:1; min-width:150px;">
+                <label>الفئة *</label>
+                <select id="prodCategory">
+                    <option value="sofa">كنبة</option>
+                    <option value="chair">كرسي</option>
+                    <option value="table">طاولة</option>
+                    <option value="bed">سرير</option>
+                    <option value="storage">تخزين</option>
+                    <option value="lighting">إضاءة</option>
+                    <option value="decor">ديكور</option>
+                </select>
+            </div>
+            <div class="form-group" style="flex:1; min-width:150px;">
+                <label>السعر (ر.س) *</label>
+                <input type="number" id="prodPrice" placeholder="299" step="0.01" required>
+            </div>
         </div>
         <div style="display:flex; gap:1rem; flex-wrap:wrap;">
-            <div class="form-group" style="flex:1; min-width:150px;"><label>Colors (comma separated)</label><input type="text" id="prodColors" placeholder="Walnut, Oak, Black"></div>
-            <div class="form-group" style="flex:1; min-width:150px;"><label>Sizes (comma separated)</label><input type="text" id="prodSizes" placeholder="140cm, 160cm, 200cm"></div>
+            <div class="form-group" style="flex:1; min-width:150px;">
+                <label>الألوان (مفصولة بفاصلة)</label>
+                <input type="text" id="prodColors" placeholder="بني, بيج, رمادي">
+            </div>
+            <div class="form-group" style="flex:1; min-width:150px;">
+                <label>المقاسات (مفصولة بفاصلة)</label>
+                <input type="text" id="prodSizes" placeholder="180سم, 200سم">
+            </div>
         </div>
-        <div class="form-group"><label>Description</label><textarea id="prodDesc" rows="3" placeholder="Describe your piece..."></textarea></div>
+        <div class="form-group"><label>الوصف</label><textarea id="prodDesc" rows="3" placeholder="صف المنتج..."></textarea></div>
         <div class="form-group">
-            <label>Product Photo</label>
+            <label>صورة المنتج</label>
             <div class="image-upload">
                 <input type="file" id="prodImageFile" accept="image/*">
-                <div class="placeholder"><i class="fas fa-cloud-upload-alt"></i><p>Click or drag an image here</p></div>
-                <img id="imagePreview" class="preview" alt="Preview">
+                <div class="placeholder"><i class="fas fa-cloud-upload-alt"></i><p>اختر صورة أو اسحبها هنا</p></div>
+                <img id="imagePreview" class="preview" alt="معاينة">
             </div>
             <input type="hidden" id="prodImageData" value="">
+            <p class="footer-note">الحد الأقصى 2MB. الصيغ المدعومة: JPG, PNG, WebP, GIF</p>
         </div>
-        <button type="submit" class="btn btn-block btn-success"><i class="fas fa-save"></i> Add Product to Store</button>
+        <button type="submit" class="btn btn-block" style="background:#2e7d32;"><i class="fas fa-save"></i> إضافة المنتج</button>
         <div id="productMessage" class="message"></div>
     </form>
 
     <div class="back-links">
-        <a href="index.html"><i class="fas fa-store"></i> Back to Shop</a>
-        <a href="orders.html"><i class="fas fa-clipboard-list"></i> View Orders</a>
+        <a href="index.html"><i class="fas fa-store"></i> العودة إلى المتجر</a>
+        <a href="orders.html"><i class="fas fa-clipboard-list"></i> عرض الطلبات</a>
     </div>
 </div>
 
-<footer style="background:#2c241e; color:#ebddd2; padding:1.2rem 1.5rem; margin-top:2rem; text-align:center; font-size:0.8rem; display:flex; justify-content:center; gap:1.5rem; flex-wrap:wrap;">
-    <a href="index.html" style="color:#ebddd2; text-decoration:none;">🏠 Home</a>
-    <a href="add-product.html" style="color:#ebddd2; text-decoration:none;">➕ Add Product</a>
-    <a href="checkout.html" style="color:#ebddd2; text-decoration:none;">💳 Checkout</a>
-    <a href="login.html" style="color:#ebddd2; text-decoration:none;">🔑 Login</a>
-</footer>
 <script>
     const fileInput = document.getElementById('prodImageFile');
     const preview = document.getElementById('imagePreview');
     const dataHidden = document.getElementById('prodImageData');
-    
+    const MAX_SIZE_MB = 2;
+    const ALLOWED_TYPES = ['image/jpeg','image/png','image/webp','image/gif'];
+
     fileInput.addEventListener('change', function(e) {
         const file = e.target.files[0];
         if (!file) return;
+        if (!ALLOWED_TYPES.includes(file.type)) {
+            alert('❌ نوع الملف غير مدعوم. يرجى رفع JPG, PNG, WebP, أو GIF.');
+            this.value = '';
+            return;
+        }
+        if (file.size > MAX_SIZE_MB * 1024 * 1024) {
+            alert(`❌ الصورة كبيرة جداً. الحد الأقصى ${MAX_SIZE_MB}MB.`);
+            this.value = '';
+            return;
+        }
         const reader = new FileReader();
         reader.onload = function(ev) {
             preview.src = ev.target.result;
             preview.classList.add('show');
             dataHidden.value = ev.target.result;
-            if (fileInput.parentElement.querySelector('.placeholder')) {
-                fileInput.parentElement.querySelector('.placeholder').style.display = 'none';
-            }
+            const placeholder = fileInput.parentElement.querySelector('.placeholder');
+            if (placeholder) placeholder.style.display = 'none';
         };
         reader.readAsDataURL(file);
     });
 
-    document.getElementById('addProductForm').addEventListener('submit', async function(e) {
+    document.getElementById('addProductForm').addEventListener('submit', function(e) {
         e.preventDefault();
+
         const name = document.getElementById('prodName').value.trim();
         const category = document.getElementById('prodCategory').value;
         const price = parseFloat(document.getElementById('prodPrice').value);
         const colors = document.getElementById('prodColors').value.split(',').map(c=>c.trim()).filter(c=>c);
         const sizes = document.getElementById('prodSizes').value.split(',').map(s=>s.trim()).filter(s=>s);
         const desc = document.getElementById('prodDesc').value.trim();
-        
-        if (!name || isNaN(price) || price <= 0) return;
+        const imageData = dataHidden.value;
+
+        if (!name || isNaN(price) || price <= 0) {
+            const msg = document.getElementById('productMessage');
+            msg.className = 'message error';
+            msg.innerText = 'الرجاء إدخال اسم وسعر صحيحين.';
+            return;
+        }
+
+        const img = imageData || 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop';
 
         const newProduct = {
             id: Date.now(),
-            name, category, price, oldPrice: null, rating: 4.5, reviews: 1, badge: 'new',
-            img: dataHidden.value || 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop',
-            availableColors: colors.length ? colors : ['Default'],
-            availableSizes: sizes.length ? sizes : ['Standard'],
-            description: desc || 'Handcrafted piece',
+            name,
+            category,
+            price,
+            oldPrice: null,
+            rating: 4.5,
+            reviews: 0,
+            badge: 'جديد',
+            img,
+            availableColors: colors.length ? colors : ['افتراضي'],
+            availableSizes: sizes.length ? sizes : ['قياسي'],
+            description: desc || '',
+            addedBy: 'مدير',
             addedDate: new Date().toISOString()
         };
 
+        let custom = JSON.parse(localStorage.getItem('بيتي_منتجات_مخصصة')) || [];
+        custom.push(newProduct);
+        localStorage.setItem('بيتي_منتجات_مخصصة', JSON.stringify(custom));
+
         const msg = document.getElementById('productMessage');
-
-        try {
-            let res = await fetch('/api/products', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newProduct)
-            });
-            if(res.ok) {
-                msg.className = 'message success';
-                msg.innerText = `✅ "${name}" added instantly to Server Ecosystem!`;
-            } else { throw new Error(); }
-        } catch {
-            let custom = JSON.parse(localStorage.getItem('havenly_custom_products')) || [];
-            custom.push(newProduct);
-            try {
-                localStorage.setItem('havenly_custom_products', JSON.stringify(custom));
-                msg.className = 'message success';
-                msg.innerText = `⚠️ Added Locally only (Server Connection Offline).`;
-            } catch {
-                msg.className = 'message error';
-                msg.innerText = `❌ Image file is too large for browser LocalStorage. Clear space!`;
-            }
-        }
-
-        document.getElementById('addProductForm').reset();
-        preview.classList.remove('show');
-        dataHidden.value = '';
-        if (fileInput.parentElement.querySelector('.placeholder')) {
-            fileInput.parentElement.querySelector('.placeholder').style.display = 'block';
-        }
+        msg.className = 'message success';
+        msg.innerText = `✅ تمت إضافة "${name}" بنجاح! سيظهر في المتجر فوراً.`;
+        document.getElementById('prodName').value = '';
+        document.getElementById('prodPrice').value = '';
+        document.getElementById('prodColors').value = '';
+        document.getElementById('prodSizes').value = '';
+        document.getElementById('prodDesc').value = '';
     });
 </script>
 </body>
