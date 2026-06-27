@@ -1,302 +1,697 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
-
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Havenly – Handcrafted Premium Furniture Marketplace</title>
-    <meta name="description" content="Shop elegant, organic modern sofas, clay sectionals, and luxury handcrafted home decor at Havenly.">
-    <meta name="keywords" content="furniture, luxury sofa, modern home decor, dining tables, interior design">
-
-<style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>بيتي على ذوقي – أثاث منزلي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
         * { margin:0; padding:0; box-sizing:border-box; }
         :root {
-            --clay: #c17a5e; --clay-dark: #9e5e45; --sand: #f9f2e7;
-            --text-deep: #3b2a1f; --olive: #7b8a5c; --cream: #fffaf3;
-            --shadow: 0 12px 28px rgba(0,0,0,0.06); --radius: 20px;
+            --blue: #4A7C9B;
+            --blue-light: #6A9EC0;
+            --blue-dark: #1A3B4C;
+            --warm-bg: #F8F0E3;
+            --white: #FFFFFF;
+            --text: #2C3E50;
+            --shadow: 0 8px 24px rgba(0,0,0,0.06);
+            --radius: 20px;
         }
-        body { font-family: 'Inter', sans-serif; background: var(--sand); color: var(--text-deep); }
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: #f9e3ce;
+            color: var(--text);
+        }
 
-        /* Navbar */
+        /* ====== القائمة العلوية ====== */
         .navbar {
-            position: fixed; top:0; left:0; width:100%;
-            background: rgba(255,248,240,0.96); backdrop-filter: blur(16px);
-            z-index:1100; padding:0 5%; height:70px;
-            display: flex; align-items: center; justify-content: space-between;
-            border-bottom:1px solid rgba(193,122,94,0.2);
+            background: #fbe9d6;
+            padding: 0.8rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            border-bottom: 3px solid var(--blue-light);
         }
-        .logo { font-size:1.8rem; font-weight:900; color:var(--clay); }
-        .logo span { color:var(--olive); }
-        .nav-links { display: flex; gap:2rem; align-items: center; }
-        .nav-links a { text-decoration:none; font-weight:600; color:var(--text-deep); }
-        .nav-links a:hover { color:var(--clay); }
-        .admin-link { background:var(--olive); color:white !important; padding:0.4rem 1rem; border-radius:40px; }
-        .cart-icon { background:var(--clay); width:46px; height:46px; border-radius:18px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:white; position:relative; }
-        .cart-count { position:absolute; top:-8px; right:-8px; background:var(--olive); border-radius:50%; width:22px; height:22px; font-size:0.7rem; display:flex; align-items:center; justify-content:center; }
-        .mobile-nav { display:none; } /* we'll skip mobile nav for simplicity */
+        .navbar .logo img {
+            height: 50px;
+            max-width: 200px;
+            object-fit: contain;
+        }
+        .nav-links {
+            display: flex;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 2rem;
+            transition: 0.2s;
+        }
+        .nav-links a:hover {
+            background: var(--blue);
+            color: white;
+        }
+        .nav-links .cart-link {
+            background: var(--blue);
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            position: relative;
+        }
+        .nav-links .cart-link:hover {
+            background: var(--blue-dark);
+        }
+        .cart-count-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #E67E22;
+            color: white;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            font-size: 0.65rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text);
+            cursor: pointer;
+        }
+        @media (max-width: 768px) {
+            .menu-toggle { display: block; }
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background: white;
+                padding: 0.5rem 0;
+                border-radius: 0 0 1rem 1rem;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            }
+            .nav-links.open { display: flex; }
+            .navbar .logo img { height: 40px; }
+        }
 
-        /* Hero */
-        .hero { margin-top:70px; background:linear-gradient(125deg, #e2cbb5, #cfb595); padding:3rem 1.5rem; text-align:center; }
-        .hero h1 { font-size:clamp(2.2rem,8vw,3.5rem); }
-        .hero-btn { background:var(--clay); color:white; padding:0.8rem 2rem; border-radius:50px; text-decoration:none; display:inline-block; margin-top:1rem; }
+        /* ====== الهيرو ====== */
+        .hero {
+            background: linear-gradient(135deg, var(--blue-light), var(--blue));
+            padding: 3rem 1.5rem;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: "🛋️";
+            position: absolute;
+            font-size: 15rem;
+            opacity: 0.08;
+            left: -5%;
+            top: -10%;
+            transform: rotate(-15deg);
+        }
+        .hero::after {
+            content: "🪑";
+            position: absolute;
+            font-size: 12rem;
+            opacity: 0.08;
+            right: -5%;
+            bottom: -10%;
+            transform: rotate(15deg);
+        }
+        .hero h1 { font-size: clamp(2.2rem, 6vw, 3.5rem); font-weight: 900; position: relative; z-index: 1; }
+        .hero h1 span { color: #FFE8B6; }
+        .hero p { font-size: 1.2rem; opacity: 0.95; margin: 0.5rem 0 1.5rem; position: relative; z-index: 1; }
+        .hero-btn {
+            background: white; color: var(--blue); padding: 0.8rem 2.5rem;
+            border-radius: 50px; text-decoration: none; font-weight: 800;
+            display: inline-block; transition: 0.2s; position: relative; z-index: 1;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .hero-btn:hover { transform: translateY(-4px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
 
-        /* Filters */
-        .filters-panel { max-width:1400px; margin:2rem auto 0; padding:0 1.5rem; display:flex; flex-wrap:wrap; gap:1rem; justify-content:space-between; align-items:center; }
-        .filter-group { display:flex; gap:0.6rem; flex-wrap:wrap; }
-        .filter-chip { background:var(--cream); border:2px solid #e3d3c4; border-radius:60px; padding:0.5rem 1.2rem; font-weight:600; cursor:pointer; }
-        .filter-chip.active { border-color:var(--clay); background:#fff1e6; }
-        .controls-group { display:flex; flex-wrap:wrap; gap:0.8rem; align-items:center; }
-        .search-input, .sort-select { padding:0.6rem 1rem; border-radius:60px; border:2px solid #e3d3c4; background:var(--cream); }
-        .price-range { background:var(--cream); padding:0.3rem 1rem; border-radius:60px; display:flex; align-items:center; gap:0.8rem; }
+        /* ====== الفلاتر ====== */
+        .filters-panel {
+            max-width: 1400px; margin: 2rem auto 0; padding: 0 1.5rem;
+            display: flex; flex-wrap: wrap; gap: 1rem;
+            justify-content: space-between; align-items: center;
+        }
+        .filter-group { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+        .filter-chip {
+            background: white; border: 2px solid #D4A373;
+            border-radius: 60px; padding: 0.5rem 1.2rem;
+            font-weight: 700; cursor: pointer; color: var(--text);
+            transition: 0.2s;
+        }
+        .filter-chip.active { background: var(--blue); color: white; border-color: var(--blue); }
+        .controls-group {
+            display: flex; flex-wrap: wrap; gap: 0.8rem; align-items: center;
+        }
+        .search-input, .sort-select {
+            padding: 0.6rem 1rem; border-radius: 60px;
+            border: 2px solid #D4A373; background: white; font-family: inherit;
+        }
+        .price-range {
+            background: white; padding: 0.3rem 1rem; border-radius: 60px;
+            display: flex; align-items: center; gap: 0.8rem;
+            border: 2px solid #D4A373;
+        }
 
-        /* Products Grid */
-        .products-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:1.8rem; padding:2rem 1.5rem; max-width:1400px; margin:0 auto; }
-        .product-card { background:var(--cream); border-radius:var(--radius); overflow:hidden; cursor:pointer; box-shadow:var(--shadow); transition:0.2s; }
-        .product-card:hover { transform:translateY(-4px); }
-        .product-img { width:100%; height:220px; object-fit:cover; }
-        .product-info { padding:1rem; }
-        .product-name { font-weight:800; font-size:1.1rem; }
-        .price-box { display:flex; gap:0.6rem; margin:0.5rem 0; align-items:baseline; }
-        .current-price { font-size:1.3rem; font-weight:800; color:var(--clay-dark); }
+        /* ====== المنتجات ====== */
+        .products-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.8rem; padding: 2rem 1.5rem; max-width: 1400px; margin: 0 auto;
+        }
+        .product-card {
+            background: #f5f2ef; border-radius: var(--radius); overflow: hidden;
+            cursor: pointer; box-shadow: var(--shadow); transition: 0.25s;
+            border: 1px solid rgba(74, 124, 155, 0.1);
+        }
+        .product-card:hover { transform: translateY(-8px); box-shadow: 0 16px 40px rgba(74, 124, 155, 0.15); border-color: var(--blue-light); }
+        .product-img { width: 100%; height: 220px; object-fit: cover; }
+        .product-info { padding: 1rem; }
+        .product-name { font-weight: 800; font-size: 1.1rem; margin-bottom: 0.3rem; }
+        .price-box { display: flex; gap: 0.6rem; margin: 0.5rem 0; align-items: baseline; }
+        .current-price { font-size: 1.3rem; font-weight: 800; color: var(--blue); }
 
-        /* Modal */
-        .modal-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); z-index:2000; display:flex; align-items:center; justify-content:center; opacity:0; visibility:hidden; transition:0.3s; }
+        /* ====== المودال ====== */
+        .modal-overlay {
+            position: fixed; top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.7); z-index:2000;
+            display: flex; align-items:center; justify-content:center;
+            opacity:0; visibility:hidden; transition:0.3s;
+        }
         .modal-overlay.active { opacity:1; visibility:visible; }
-        .product-modal { background:var(--cream); max-width:900px; width:95%; max-height:90vh; border-radius:1.5rem; overflow-y:auto; position:relative; }
-        .modal-close { position:absolute; top:1.5rem; right:1.5rem; font-size:1.8rem; cursor:pointer; }
-        .modal-body { display:flex; flex-wrap:wrap; padding:1.5rem; gap:1.5rem; }
-        .modal-image { flex:1; min-width:200px; } .modal-image img { width:100%; border-radius:1.5rem; }
+        .product-modal {
+            background: white; max-width: 900px; width:95%; max-height:90vh;
+            border-radius: 1.5rem; overflow-y:auto; position:relative; padding: 1.5rem;
+        }
+        .modal-close { position:absolute; top:1.2rem; left:1.5rem; font-size:1.8rem; cursor:pointer; color: var(--text); }
+        .modal-body { display:flex; flex-wrap:wrap; gap:1.5rem; }
+        .modal-image { flex:1; min-width:200px; }
+        .modal-image img { width:100%; border-radius:1rem; }
         .modal-details { flex:1.5; display:flex; flex-direction:column; gap:1rem; }
         .color-swatches { display:flex; gap:0.8rem; flex-wrap:wrap; margin:0.5rem 0; }
-        .color-circle { width:40px; height:40px; border-radius:50%; cursor:pointer; border:3px solid transparent; }
-        .color-circle.selected { border-color:var(--clay); transform:scale(1.05); box-shadow:0 0 0 2px white, 0 0 0 4px var(--clay); }
+        .color-circle {
+            width: 40px; height: 40px; border-radius:50%; cursor:pointer;
+            border:3px solid transparent; transition:0.1s;
+        }
+        .color-circle.selected { border-color: var(--blue); transform:scale(1.05); box-shadow: 0 0 0 3px rgba(74,124,155,0.2); }
         .input-group { margin-bottom:0.8rem; }
         .input-group label { display:block; font-weight:600; margin-bottom:0.3rem; font-size:0.85rem; }
-        .input-group input, .input-group textarea { width:100%; padding:0.7rem; border-radius:1rem; border:2px solid #e5d5c5; font-family:inherit; }
-        .add-to-cart-modal { background:var(--clay); color:white; border:none; padding:0.8rem; border-radius:2rem; font-weight:700; cursor:pointer; width:100%; margin-top:0.5rem; }
+        .input-group input, .input-group textarea {
+            width:100%; padding:0.7rem; border-radius:1rem;
+            border:2px solid #D4A373; font-family:inherit;
+        }
+        .add-to-cart-modal {
+            background: var(--blue); color:white; border:none;
+            padding:0.8rem; border-radius:2rem; font-weight:700;
+            cursor:pointer; width:100%; margin-top:0.5rem; transition:0.2s;
+        }
+        .add-to-cart-modal:hover { background: var(--blue-dark); }
 
-        /* Cart Sidebar */
-        .cart-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1299; opacity:0; visibility:hidden; transition:0.3s; }
-        .cart-sidebar { position:fixed; top:0; right:-100%; width:90%; max-width:420px; height:100%; background:var(--cream); z-index:1400; transition:0.3s; display:flex; flex-direction:column; }
-        .cart-sidebar.open { right:0; }
-        .cart-header { padding:1rem; border-bottom:1px solid #e9ddde; display:flex; justify-content:space-between; }
+        /* ====== السلة الجانبية ====== */
+        .cart-overlay {
+            position:fixed; top:0; left:0; width:100%; height:100%;
+            background:rgba(0,0,0,0.5); z-index:1299;
+            opacity:0; visibility:hidden; transition:0.3s;
+        }
+        .cart-sidebar {
+            position:fixed; top:0; left:-100%; width:90%; max-width:420px;
+            height:100%; background:white; z-index:1400;
+            transition:0.3s; display:flex; flex-direction:column;
+            box-shadow: 2px 0 20px rgba(0,0,0,0.1);
+        }
+        .cart-sidebar.open { left:0; }
+        .cart-header {
+            padding:1rem; border-bottom:1px solid #e5d5c5;
+            display:flex; justify-content:space-between;
+            background: var(--blue); color: white;
+        }
+        .cart-header button { background:none; border:none; font-size:1.8rem; color:white; cursor:pointer; }
         .cart-items { flex:1; overflow-y:auto; padding:1rem; }
-        .cart-item { display:flex; gap:0.8rem; margin-bottom:1rem; border-bottom:1px solid #f0e3e0; padding-bottom:1rem; }
+        .cart-item {
+            display:flex; gap:0.8rem; margin-bottom:1rem;
+            border-bottom:1px solid #f0e3e0; padding-bottom:1rem;
+        }
         .cart-item-img { width:60px; height:60px; object-fit:cover; border-radius:1rem; }
-        .cart-item-meta { font-size:0.7rem; color:#8b6f55; }
-        .cart-qty button { background:#f0e2cf; border:none; width:28px; height:28px; border-radius:0.8rem; cursor:pointer; }
-        .cart-footer { padding:1rem; border-top:1px solid #e9ddde; }
-        .checkout-btn { width:100%; background:var(--olive); padding:0.9rem; border:none; border-radius:2rem; font-weight:800; color:white; cursor:pointer; }
-        .notification { position:fixed; bottom:20px; left:20px; background:#2e7d32; color:white; padding:0.7rem 1.2rem; border-radius:2rem; transform:translateX(-200%); transition:0.3s; z-index:2100; }
-        .contact-section { max-width:780px; margin:2rem auto; background:var(--cream); padding:2rem; border-radius:32px; }
-        .footer { background:#2c241e; color:#ebddd2; padding:2rem; text-align:center; }
+        .cart-qty button {
+            background:#f0e2cf; border:none; width:28px; height:28px;
+            border-radius:0.8rem; cursor:pointer;
+        }
+        .cart-footer { padding:1rem; border-top:1px solid #e5d5c5; }
+        .checkout-btn {
+            width:100%; background:var(--blue); padding:0.9rem;
+            border:none; border-radius:2rem; font-weight:800; color:white;
+            cursor:pointer; transition:0.2s;
+        }
+        .checkout-btn:hover { background:var(--blue-dark); }
+        .notification {
+            position:fixed; bottom:20px; right:20px;
+            background:#2e7d32; color:white; padding:0.7rem 1.2rem;
+            border-radius:2rem; transform:translateX(200%);
+            transition:0.3s; z-index:2100;
+        }
 
-        @media (max-width:768px){ .nav-links { display:none; } .mobile-nav { display:block; } /* we skip mobile nav, but keep responsive */ }
+        /* ====== FOOTER الجديد (تواصل) ====== */
+        .footer {
+            background: var(--blue-dark);
+            color: #e0eef7;
+            padding: 2.5rem 1.5rem 1.5rem;
+            margin-top: 2rem;
+        }
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1.5fr;
+            gap: 2rem;
+        }
+        .footer h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #FFE8B6;
+            font-weight: 800;
+        }
+        .footer p, .footer a {
+            font-size: 0.9rem;
+            line-height: 1.8;
+            color: #cbdde8;
+            text-decoration: none;
+        }
+        .footer .social-icons {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 0.5rem;
+        }
+        .footer .social-icons a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            color: white;
+            font-size: 1.2rem;
+            transition: 0.2s;
+        }
+        .footer .social-icons a:hover {
+            background: var(--blue-light);
+            transform: translateY(-3px);
+        }
+        .footer .contact-info i {
+            width: 25px;
+            color: var(--blue-light);
+        }
+        .footer .contact-form input,
+        .footer .contact-form textarea {
+            width: 100%;
+            padding: 0.6rem 0.8rem;
+            border: none;
+            border-radius: 0.8rem;
+            margin-bottom: 0.6rem;
+            font-family: inherit;
+            background: rgba(255,255,255,0.08);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .footer .contact-form input::placeholder,
+        .footer .contact-form textarea::placeholder {
+            color: #94b3c9;
+        }
+        .footer .contact-form input:focus,
+        .footer .contact-form textarea:focus {
+            outline: none;
+            border-color: var(--blue-light);
+            background: rgba(255,255,255,0.12);
+        }
+        .footer .contact-form button {
+            background: var(--blue-light);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.9rem;
+            width: 100%;
+        }
+        .footer .contact-form button:hover {
+            background: var(--blue);
+            transform: translateY(-2px);
+        }
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            font-size: 0.8rem;
+            color: #94b3c9;
+            grid-column: 1 / -1;
+        }
+        @media (max-width: 768px) {
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .products-grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+            .modal-body { flex-direction:column; }
+        }
     </style>
 </head>
 <body>
 
-<!-- ====== ORIGINAL NAVBAR ====== -->
-<div class="navbar">
-    <div class="logo">Haven<span>ly</span></div>
-    <div class="nav-links">
-        <a href="#home">Home</a>
-        <a href="#products">Shop</a>
-        <a href="#contact">Contact</a>
-        <a href="login.html" class="admin-link"><i class="fas fa-user-shield"></i> Login</a>
+<!-- ====== القائمة العلوية ====== -->
+<nav class="navbar">
+    <div class="logo">
+        <img src="WhatsApp Image 2026-06-27 at 14.07.47.jpeg" alt="بيتي على ذوقي" style="height: 55px;">
     </div>
-    <div class="cart-icon" id="cartIconBtn"><i class="fas fa-shopping-bag"></i><span class="cart-count" id="cartCount">0</span></div>
-</div>
+    <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
+    <div class="nav-links" id="navLinks">
+        <a href="index.html">الرئيسية</a>
+        <a href="javascript:void(0)" class="cart-link" id="cartIconBtn">
+            <i class="fas fa-shopping-bag"></i> السلة
+            <span class="cart-count-badge" id="cartCount">0</span>
+        </a>
+        <a href="login.html">تسجيل الدخول</a>
+    </div>
+</nav>
 
-<!-- ====== HERO ====== -->
-<section id="home" class="hero">
-    <h1>Furniture that <span style="background:rgba(255,248,225,0.5); padding:0 8px; border-radius:40px;">inspires</span></h1>
-    <p>Click any product to customize color, height & delivery date.</p>
-    <a href="#products" class="hero-btn">Shop now →</a>
+<!-- ====== الهيرو ====== -->
+<section class="hero">
+    <h1>أثاث <span>يناسب ذوقك</span></h1>
+    <p>اكتشف مجموعتنا الفاخرة من الكنبات، الكراسي، والطاولات بجودة عالية وأسعار تنافسية</p>
+    <a href="#products" class="hero-btn">تسوق الآن</a>
 </section>
 
-<!-- ====== FILTERS ====== -->
+<!-- ====== الفلاتر ====== -->
 <div class="filters-panel" id="products">
     <div class="filter-group" id="categoryFilters">
-        <button data-cat="all" class="filter-chip active">All</button>
-        <button data-cat="sofa" class="filter-chip">Sofas</button>
-        <button data-cat="chair" class="filter-chip">Chairs</button>
-        <button data-cat="table" class="filter-chip">Tables</button>
-        <button data-cat="bed" class="filter-chip">Beds</button>
-        <button data-cat="storage" class="filter-chip">Storage</button>
-        <button data-cat="lighting" class="filter-chip">Lighting</button>
-        <button data-cat="decor" class="filter-chip">Decor</button>
+        <button data-cat="all" class="filter-chip active">الكل</button>
+        <button data-cat="sofa" class="filter-chip">🛋️ كنبات</button>
+        <button data-cat="chair" class="filter-chip">🪑 كراسي</button>
+        <button data-cat="table" class="filter-chip">🪵 طاولات</button>
+        <button data-cat="bed" class="filter-chip">🛏️ أسرة</button>
+        <button data-cat="storage" class="filter-chip">🗄️ تخزين</button>
+        <button data-cat="lighting" class="filter-chip">💡 إضاءة</button>
+        <button data-cat="decor" class="filter-chip">🎨 ديكور</button>
     </div>
     <div class="controls-group">
-        <input type="text" id="searchInput" class="search-input" placeholder="Search...">
+        <input type="text" id="searchInput" class="search-input" placeholder="بحث...">
         <select id="sortSelect" class="sort-select">
-            <option value="default">Sort: Featured</option>
-            <option value="price-asc">Price low-high</option>
-            <option value="price-desc">Price high-low</option>
-            <option value="rating">Top rated</option>
+            <option value="default">ترتيب حسب</option>
+            <option value="price-asc">السعر: من الأقل</option>
+            <option value="price-desc">السعر: من الأعلى</option>
+            <option value="rating">الأعلى تقييماً</option>
         </select>
-        <div class="price-range"><span>💰 Max $</span><input type="range" id="priceSlider" min="0" max="2000" value="2000"><span id="priceValue">2000</span></div>
+        <div class="price-range">
+            <span>💰 الحد الأقصى</span>
+            <input type="range" id="priceSlider" min="0" max="2000" value="2000">
+            <span id="priceValue">2000</span>
+        </div>
     </div>
 </div>
 
-<!-- ====== PRODUCTS GRID ====== -->
+<!-- ====== المنتجات ====== -->
 <div class="products-grid" id="productsGrid"></div>
 
-<!-- ====== CONTACT ====== -->
-<section id="contact" class="contact-section">
-    <h2>🌿 Message us</h2>
-    <form id="contactForm">
-        <input type="text" id="contactName" placeholder="Name" required style="width:100%; margin-bottom:1rem; padding:0.8rem; border-radius:28px; border:2px solid #e5d5c5;">
-        <input type="email" id="contactEmail" placeholder="Email" required style="width:100%; margin-bottom:1rem; padding:0.8rem; border-radius:28px; border:2px solid #e5d5c5;">
-        <textarea id="contactMsg" placeholder="Message" rows="3" style="width:100%; margin-bottom:1rem; padding:0.8rem; border-radius:28px;"></textarea>
-        <button type="submit" style="background:var(--clay); color:white; border:none; padding:0.8rem; border-radius:40px; width:100%;">Send</button>
-    </form>
-</section>
-
-<!-- ====== FOOTER ====== -->
+<!-- ====== FOOTER الجديد (تواصل + وسائل تواصل) ====== -->
 <footer class="footer">
-    <p>© 2025 Havenly — Click any product to customize. <a href="checkout.html" style="color:var(--clay);">Secure checkout</a></p>
+    <div class="footer-container">
+        <!-- العمود 1: معلومات الاتصال -->
+        <div class="contact-info">
+            <h3><i class="fas fa-phone-alt" style="color: var(--blue-light);"></i> تواصل معنا</h3>
+            <p><i class="fas fa-phone"></i> <span dir="ltr">+966 5 1234 5678</span></p>
+            <p><i class="fas fa-envelope"></i> info@beitizougi.com</p>
+            <p style="margin-top: 0.5rem; font-size: 0.85rem; opacity: 0.8;">نحن هنا لمساعدتك على مدار الساعة</p>
+        </div>
+
+        <!-- العمود 2: وسائل التواصل الاجتماعي -->
+        <div>
+            <h3><i class="fas fa-share-alt" style="color: var(--blue-light);"></i> تابعنا</h3>
+            <div class="social-icons">
+                <a href="#" title="فيسبوك"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" title="إنستغرام"><i class="fab fa-instagram"></i></a>
+                <a href="#" title="تويتر"><i class="fab fa-twitter"></i></a>
+                <a href="#" title="يوتيوب"><i class="fab fa-youtube"></i></a>
+            </div>
+            <p style="margin-top: 1rem; font-size: 0.85rem; opacity: 0.8;">انضم إلينا على منصات التواصل</p>
+        </div>
+
+        <!-- العمود 3: نموذج إرسال رسالة -->
+        <div>
+            <h3><i class="fas fa-paper-plane" style="color: var(--blue-light);"></i> أرسل لنا رسالة</h3>
+            <form class="contact-form" id="footerContactForm">
+                <input type="text" id="footerName" placeholder="الاسم الكامل" required>
+                <input type="email" id="footerEmail" placeholder="البريد الإلكتروني" required>
+                <textarea id="footerMessage" rows="2" placeholder="نص الرسالة..." required></textarea>
+                <button type="submit"><i class="fas fa-paper-plane"></i> إرسال</button>
+                <div id="footerFormMsg" style="margin-top:0.5rem; font-size:0.8rem; color: #FFE8B6; display:none;"></div>
+            </form>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2025 بيتي على ذوقي – جميع الحقوق محفوظة</p>
+            <p style="font-size: 0.7rem; margin-top: 0.3rem;">أثاث منزلي راقٍ يناسب ذوقك</p>
+        </div>
+    </div>
 </footer>
 
-<!-- ====== CART SIDEBAR ====== -->
+<!-- ====== السلة الجانبية ====== -->
 <div class="cart-overlay" id="cartOverlay"></div>
 <div class="cart-sidebar" id="cartSidebar">
-    <div class="cart-header"><h3>Your cart 🧺</h3><button id="closeCartBtn" style="background:none; border:none; font-size:1.8rem;">&times;</button></div>
+    <div class="cart-header">
+        <h3>🛒 سلة المشتريات</h3>
+        <button id="closeCartBtn">&times;</button>
+    </div>
     <div class="cart-items" id="cartItemsList"></div>
-    <div class="cart-footer"><div class="total-price">Total: $<span id="cartTotalAmount">0.00</span></div><button class="checkout-btn" id="checkoutBtn">Proceed to secure checkout →</button></div>
+    <div class="cart-footer">
+        <div class="total-price">الإجمالي: <span id="cartTotalAmount">0.00</span> ر.س</div>
+        <button class="checkout-btn" id="checkoutBtn">إتمام الشراء →</button>
+    </div>
 </div>
 
-<!-- ====== NOTIFICATION ====== -->
-<div id="notificationToast" class="notification">✨ Item added</div>
+<!-- ====== الإشعارات ====== -->
+<div id="notificationToast" class="notification">✨ تمت الإضافة</div>
 
-<!-- ====== PRODUCT MODAL ====== -->
+<!-- ====== نافذة المنتج ====== -->
 <div id="productModal" class="modal-overlay">
     <div class="product-modal">
         <div class="modal-close" id="closeModalBtn">&times;</div>
         <div class="modal-body">
-            <div class="modal-image"><img id="modalImg" src="" alt="Product"></div>
+            <div class="modal-image"><img id="modalImg" src="" alt="منتج"></div>
             <div class="modal-details">
                 <h2 id="modalName"></h2>
                 <p id="modalPrice" class="current-price"></p>
-                <div><strong>Color :</strong></div>
+                <div><strong>اللون:</strong></div>
                 <div id="modalColorSwatches" class="color-swatches"></div>
-                <div class="input-group"><label><i class="fas fa-ruler"></i> Hauteur / Dimensions (cm)</label><input type="text" id="modalHeight" placeholder="Ex: 85 cm"></div>
-                <div class="input-group"><label><i class="fas fa-calendar-alt"></i> Date de commande / livraison</label><input type="date" id="modalOrderDate"></div>
-                <div class="input-group"><label><i class="fas fa-pen"></i> Instructions spéciales</label><textarea id="modalNotes" rows="2" placeholder="Ajoutez une note..."></textarea></div>
-                <button id="modalAddToCart" class="add-to-cart-modal">➕ Ajouter au panier</button>
+                <div class="input-group"><label><i class="fas fa-ruler"></i> الارتفاع / الأبعاد (سم)</label><input type="text" id="modalHeight" placeholder="مثال: 85 سم"></div>
+                <div class="input-group"><label><i class="fas fa-calendar-alt"></i> تاريخ التوصيل المطلوب</label><input type="date" id="modalOrderDate"></div>
+                <div class="input-group"><label><i class="fas fa-pen"></i> ملاحظات خاصة</label><textarea id="modalNotes" rows="2" placeholder="أضف ملاحظة..."></textarea></div>
+                <button id="modalAddToCart" class="add-to-cart-modal">➕ أضف إلى السلة</button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- ====== JAVASCRIPT ====== -->
 <script>
-    // ============================================================
-    // PRODUCTS DATABASE (60 items + custom)
-    // ============================================================
+    // ================================================================
+    // 1. المنتجات (نفس الكود السابق مع أسماء عربية)
+    // ================================================================
     const baseProducts = [
-        { id:1, name:"Velvet Earth Sofa", category:"sofa", price:481, rating:4.2, reviews:378, badge:"new", img:"https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop", availableColors:["Terracotta","Olive","Sand"], availableSizes:["180cm","200cm","240cm"] },
-        { id:2, name:"Clay Sectional", category:"sofa", price:533, oldPrice:666, rating:4.8, reviews:235, badge:"hot", img:"https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=400&h=300&fit=crop", availableColors:["Clay","Warm Beige","Charcoal"], availableSizes:["260cm","300cm"] },
-        { id:3, name:"Linen Cloud Couch", category:"sofa", price:585, rating:4.5, reviews:412, badge:"new", img:"https://images.unsplash.com/photo-1617806118233-18e1de247200?w=400&h=300&fit=crop", availableColors:["Natural Linen","Oatmeal","Stone"], availableSizes:["200cm","220cm"] },
-        { id:4, name:"Oak Armchair", category:"chair", price:111, oldPrice:139, rating:4.1, reviews:412, badge:"sale", img:"https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=400&h=300&fit=crop", availableColors:["Natural Oak","Walnut","Black"], availableSizes:["Standard","Large"] },
-        { id:5, name:"Driftwood Dining Table", category:"table", price:143, oldPrice:179, rating:4.3, reviews:267, badge:"sale", img:"https://images.unsplash.com/photo-1617806118233-18e1de247200?w=400&h=300&fit=crop", availableColors:["Brown","Natural","Whitewash"], availableSizes:["140cm","160cm","200cm"] },
-        { id:6, name:"Solid Oak Platform", category:"bed", price:724, oldPrice:905, rating:4.6, reviews:267, badge:"sale", img:"https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=400&h=300&fit=crop", availableColors:["Oak","Walnut","White"], availableSizes:["Queen","King"] },
-        { id:7, name:"Tall Bamboo Shelf", category:"storage", price:111, rating:4.2, reviews:412, badge:"new", img:"https://images.unsplash.com/photo-1594620302200-9a762244a156?w=400&h=300&fit=crop", availableColors:["Natural Bamboo","Espresso"], availableSizes:["150cm","180cm"] },
-        { id:8, name:"Hemp Rope Pendant", category:"lighting", price:59, rating:4.3, reviews:412, badge:"new", img:"https://images.unsplash.com/photo-1524484485831-a92ffc0de03f?w=400&h=300&fit=crop", availableColors:["Natural","Black","Brass"], availableSizes:["30cm","45cm"] },
-        { id:9, name:"Dried Floral Arrangement", category:"decor", price:79, rating:4.4, reviews:412, badge:"new", img:"https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=400&h=300&fit=crop", availableColors:["Dusty Rose","Wheat","Sage"], availableSizes:["Medium","Large"] }
+        { id:1, name:"كنبة مخملية ترابية", category:"sofa", price:481, oldPrice:null, rating:4.2, reviews:378, badge:"جديد", img:"https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop", availableColors:["تراكوتا","زيتوني","رملي"], availableSizes:["180سم","200سم","240سم"] },
+        { id:2, name:"كنبة زاوية فخمة", category:"sofa", price:533, oldPrice:666, rating:4.8, reviews:235, badge:"الأكثر طلباً", img:"https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=400&h=300&fit=crop", availableColors:["بني","بيج","رمادي"], availableSizes:["260سم","300سم"] },
+        { id:3, name:"أريكة كتان مريحة", category:"sofa", price:585, rating:4.5, reviews:412, badge:"جديد", img:"https://images.unsplash.com/photo-1617806118233-18e1de247200?w=400&h=300&fit=crop", availableColors:["كتان طبيعي","شوفان","حجري"], availableSizes:["200سم","220سم"] },
+        { id:4, name:"كرسي خشب البلوط", category:"chair", price:111, oldPrice:139, rating:4.1, reviews:412, badge:"تخفيض", img:"https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=400&h=300&fit=crop", availableColors:["بلوط طبيعي","جوزي","أسود"], availableSizes:["قياسي","كبير"] },
+        { id:5, name:"طاولة طعام من الخشب المنجور", category:"table", price:143, oldPrice:179, rating:4.3, reviews:267, badge:"تخفيض", img:"https://images.unsplash.com/photo-1617806118233-18e1de247200?w=400&h=300&fit=crop", availableColors:["بني","طبيعي","أبيض"], availableSizes:["140سم","160سم","200سم"] },
+        { id:6, name:"سرير خشب صلب", category:"bed", price:724, oldPrice:905, rating:4.6, reviews:267, badge:"تخفيض", img:"https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=400&h=300&fit=crop", availableColors:["بلوط","جوزي","أبيض"], availableSizes:["ملكي","كبير"] },
+        { id:7, name:"رف خيزران طويل", category:"storage", price:111, rating:4.2, reviews:412, badge:"جديد", img:"https://images.unsplash.com/photo-1594620302200-9a762244a156?w=400&h=300&fit=crop", availableColors:["خيزران طبيعي","داكن"], availableSizes:["150سم","180سم"] },
+        { id:8, name:"ثريا حبال", category:"lighting", price:59, rating:4.3, reviews:412, badge:"جديد", img:"https://images.unsplash.com/photo-1524484485831-a92ffc0de03f?w=400&h=300&fit=crop", availableColors:["طبيعي","أسود","نحاسي"], availableSizes:["30سم","45سم"] },
+        { id:9, name:"تنسيق زهور مجففة", category:"decor", price:79, rating:4.4, reviews:412, badge:"جديد", img:"https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?w=400&h=300&fit=crop", availableColors:["وردي باهت","قمحي","مريمية"], availableSizes:["متوسط","كبير"] }
     ];
-    // Add 51 more filler products
-    for(let i=10; i<=60; i++){ let cats = ['sofa','chair','table','bed','storage','lighting','decor']; let cat = cats[i%cats.length]; let price = 70 + (i*8); if(price>1200) price=1200; baseProducts.push({ id: i, name: `${cat.charAt(0).toUpperCase()+cat.slice(1)} ${i}`, category: cat, price: price, rating: (3.5+Math.random()*1.2).toFixed(1), reviews: Math.floor(20+Math.random()*300), badge: "new", img: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop", availableColors: ["Earthy Brown","Warm Gray","Clay Red","Olive Green","Sand Beige"].slice(0,3+Math.floor(Math.random()*2)), availableSizes: ["Standard","Large","Compact"].slice(0,2+Math.floor(Math.random()*2)) }); }
-    // Load custom products
-    let customProducts = JSON.parse(localStorage.getItem('havenly_custom_products')) || [];
+    for(let i=10; i<=60; i++){
+        const cats = ['sofa','chair','table','bed','storage','lighting','decor'];
+        const cat = cats[i%cats.length];
+        const names = ['كنبة','كرسي','طاولة','سرير','رف','إضاءة','ديكور'];
+        const price = 70 + (i*8);
+        baseProducts.push({
+            id: i,
+            name: `${names[i%names.length]} ${i}`,
+            category: cat,
+            price: price > 1200 ? 1200 : price,
+            rating: (3.5+Math.random()*1.2).toFixed(1),
+            reviews: Math.floor(20+Math.random()*300),
+            badge: "جديد",
+            img: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop",
+            availableColors: ["بني ترابي","رمادي دافئ","أحمر طيني","زيتوني","بيج رملي"].slice(0,3+Math.floor(Math.random()*2)),
+            availableSizes: ["قياسي","كبير","مدمج"].slice(0,2+Math.floor(Math.random()*2))
+        });
+    }
+    let customProducts = JSON.parse(localStorage.getItem('بيتي_منتجات_مخصصة')) || [];
     let allProducts = [...baseProducts, ...customProducts];
 
-    // ============================================================
-    // CART LOGIC
-    // ============================================================
-    let cart = JSON.parse(localStorage.getItem('havenly_cart')) || [];
+    // ================================================================
+    // 2. السلة
+    // ================================================================
+    let cart = JSON.parse(localStorage.getItem('بيتي_سلة')) || [];
 
-    function saveCart() { localStorage.setItem('havenly_cart', JSON.stringify(cart)); updateCartUI(); }
-    function showNotification(msg) { let toast = document.getElementById('notificationToast'); toast.innerText = msg; toast.style.transform='translateX(0%)'; setTimeout(()=>toast.style.transform='translateX(-200%)',2500); }
+    function saveCart() { localStorage.setItem('بيتي_سلة', JSON.stringify(cart)); updateCartUI(); }
+    function showNotification(msg) {
+        let toast = document.getElementById('notificationToast');
+        toast.innerText = msg;
+        toast.style.transform = 'translateX(0%)';
+        setTimeout(() => toast.style.transform = 'translateX(200%)', 2500);
+    }
     function updateCartUI() {
-        let count = cart.reduce((s,i)=>s+i.qty,0);
+        let count = cart.reduce((s,i) => s + i.qty, 0);
         document.getElementById('cartCount').innerText = count;
-        let total = cart.reduce((s,i)=>s+(i.price*i.qty),0);
+        let total = cart.reduce((s,i) => s + (i.price * i.qty), 0);
         document.getElementById('cartTotalAmount').innerText = total.toFixed(2);
         renderCartItems();
     }
     function renderCartItems() {
         let container = document.getElementById('cartItemsList');
         if(!container) return;
-        if(cart.length===0){ container.innerHTML='<p style="text-align:center;">Cart empty 🧺</p>'; return; }
+        if(cart.length === 0) {
+            container.innerHTML = '<p style="text-align:center; padding:1rem;">سلة فارغة 🧺</p>';
+            return;
+        }
         container.innerHTML = cart.map(item => `
             <div class="cart-item">
                 <img src="${item.img}" class="cart-item-img">
-                <div><div class="cart-item-name">${item.name}</div><div class="cart-item-meta">Color: ${item.selectedColor} | Height: ${item.customHeight || '-'} | Date: ${item.orderDate || '-'}</div><div>$${item.price}</div>
-                <div class="cart-qty"><button class="decQty" data-id="${item.id}" data-color="${item.selectedColor}" data-height="${item.customHeight}" data-date="${item.orderDate}">-</button><span>${item.qty}</span><button class="incQty" data-id="${item.id}" data-color="${item.selectedColor}" data-height="${item.customHeight}" data-date="${item.orderDate}">+</button><button class="removeItem" data-id="${item.id}" data-color="${item.selectedColor}" data-height="${item.customHeight}" data-date="${item.orderDate}" style="background:#d99b7a; border:none; border-radius:12px; margin-left:0.5rem;"><i class="fas fa-trash"></i></button></div></div><div><strong>$${(item.price*item.qty).toFixed(2)}</strong></div>
+                <div>
+                    <div style="font-weight:700;">${item.name}</div>
+                    <div style="font-size:0.7rem; color:#6b4f3a;">اللون: ${item.selectedColor} | الارتفاع: ${item.customHeight || '-'}</div>
+                    <div>${item.price} ر.س</div>
+                    <div class="cart-qty">
+                        <button class="decQty" data-id="${item.id}" data-color="${item.selectedColor}" data-height="${item.customHeight}" data-date="${item.orderDate}">-</button>
+                        <span>${item.qty}</span>
+                        <button class="incQty" data-id="${item.id}" data-color="${item.selectedColor}" data-height="${item.customHeight}" data-date="${item.orderDate}">+</button>
+                        <button class="removeItem" data-id="${item.id}" data-color="${item.selectedColor}" data-height="${item.customHeight}" data-date="${item.orderDate}" style="background:#d99b7a; border:none; border-radius:12px; margin-left:0.5rem; padding:0 0.5rem;">✕</button>
+                    </div>
+                </div>
+                <div><strong>${(item.price * item.qty).toFixed(2)} ر.س</strong></div>
             </div>
         `).join('');
-        document.querySelectorAll('.decQty').forEach(btn=>btn.addEventListener('click',()=>{ let id=parseInt(btn.dataset.id), col=btn.dataset.color, ht=btn.dataset.height, dt=btn.dataset.date; changeQty(id,col,ht,dt,-1); }));
-        document.querySelectorAll('.incQty').forEach(btn=>btn.addEventListener('click',()=>{ let id=parseInt(btn.dataset.id), col=btn.dataset.color, ht=btn.dataset.height, dt=btn.dataset.date; changeQty(id,col,ht,dt,1); }));
-        document.querySelectorAll('.removeItem').forEach(btn=>btn.addEventListener('click',()=>{ let id=parseInt(btn.dataset.id), col=btn.dataset.color, ht=btn.dataset.height, dt=btn.dataset.date; cart = cart.filter(i=>!(i.id===id && i.selectedColor===col && i.customHeight===ht && i.orderDate===dt)); saveCart(); renderProducts(); }));
+        document.querySelectorAll('.decQty').forEach(btn => btn.addEventListener('click', () => {
+            let id = parseInt(btn.dataset.id), col = btn.dataset.color, ht = btn.dataset.height, dt = btn.dataset.date;
+            changeQty(id, col, ht, dt, -1);
+        }));
+        document.querySelectorAll('.incQty').forEach(btn => btn.addEventListener('click', () => {
+            let id = parseInt(btn.dataset.id), col = btn.dataset.color, ht = btn.dataset.height, dt = btn.dataset.date;
+            changeQty(id, col, ht, dt, 1);
+        }));
+        document.querySelectorAll('.removeItem').forEach(btn => btn.addEventListener('click', () => {
+            let id = parseInt(btn.dataset.id), col = btn.dataset.color, ht = btn.dataset.height, dt = btn.dataset.date;
+            cart = cart.filter(i => !(i.id === id && i.selectedColor === col && i.customHeight === ht && i.orderDate === dt));
+            saveCart();
+            renderProducts();
+        }));
     }
     function changeQty(id, color, height, date, delta) {
-        let idx = cart.findIndex(i=>i.id===id && i.selectedColor===color && i.customHeight===height && i.orderDate===date);
-        if(idx!==-1){ cart[idx].qty+=delta; if(cart[idx].qty<=0) cart.splice(idx,1); saveCart(); renderProducts(); }
+        let idx = cart.findIndex(i => i.id === id && i.selectedColor === color && i.customHeight === height && i.orderDate === date);
+        if(idx !== -1) {
+            cart[idx].qty += delta;
+            if(cart[idx].qty <= 0) cart.splice(idx, 1);
+            saveCart();
+            renderProducts();
+        }
     }
     function addToCartWithOptions(product, selectedColor, customHeight, orderDate, notes) {
-        let existing = cart.find(i=>i.id===product.id && i.selectedColor===selectedColor && i.customHeight===customHeight && i.orderDate===orderDate);
+        let existing = cart.find(i => i.id === product.id && i.selectedColor === selectedColor && i.customHeight === customHeight && i.orderDate === orderDate);
         if(existing) existing.qty++;
-        else cart.push({ id:product.id, name:product.name, price:product.price, qty:1, img:product.img, selectedColor, customHeight, orderDate, notes });
-        saveCart(); updateCartUI(); showNotification(`${product.name} (${selectedColor}) ajouté`);
+        else cart.push({ id: product.id, name: product.name, price: product.price, qty: 1, img: product.img, selectedColor, customHeight, orderDate, notes });
+        saveCart();
+        updateCartUI();
+        showNotification(`تمت إضافة "${product.name}" (${selectedColor})`);
     }
 
-    // ============================================================
-    // FILTER & RENDER
-    // ============================================================
-    let currentCategory='all', currentSearch='', currentSort='default', maxPrice=2000;
-    function getFiltered() { let filtered = allProducts.filter(p => (currentCategory==='all' || p.category===currentCategory) && p.price <= maxPrice); if(currentSearch.trim()) filtered = filtered.filter(p=>p.name.toLowerCase().includes(currentSearch.toLowerCase())); if(currentSort==='price-asc') filtered.sort((a,b)=>a.price-b.price); if(currentSort==='price-desc') filtered.sort((a,b)=>b.price-a.price); if(currentSort==='rating') filtered.sort((a,b)=>b.rating-a.rating); return filtered; }
+    // ================================================================
+    // 3. التصفية والعرض
+    // ================================================================
+    let currentCategory = 'all', currentSearch = '', currentSort = 'default', maxPrice = 2000;
+    function getFiltered() {
+        let filtered = allProducts.filter(p => (currentCategory === 'all' || p.category === currentCategory) && p.price <= maxPrice);
+        if(currentSearch.trim()) filtered = filtered.filter(p => p.name.includes(currentSearch));
+        if(currentSort === 'price-asc') filtered.sort((a,b) => a.price - b.price);
+        else if(currentSort === 'price-desc') filtered.sort((a,b) => b.price - a.price);
+        else if(currentSort === 'rating') filtered.sort((a,b) => b.rating - a.rating);
+        return filtered;
+    }
     function renderProducts() {
         let grid = document.getElementById('productsGrid');
         let filtered = getFiltered();
-        if(filtered.length===0){ grid.innerHTML='<div style="text-align:center;">No products 🌿</div>'; return; }
+        if(filtered.length === 0) {
+            grid.innerHTML = '<div style="text-align:center; grid-column:1/-1; padding:2rem;">لا توجد منتجات تطابق بحثك 🌿</div>';
+            return;
+        }
         grid.innerHTML = filtered.map(p => `
             <div class="product-card" data-id="${p.id}">
                 <img class="product-img" src="${p.img}" alt="${p.name}">
                 <div class="product-info">
                     <div class="product-name">${p.name}</div>
-                    <div class="price-box"><span class="current-price">$${p.price}</span>${p.oldPrice?`<span style="text-decoration:line-through;">$${p.oldPrice}</span>`:''}</div>
-                    <div style="font-size:0.7rem; color:#8b6f55;">Cliquez pour personnaliser</div>
+                    <div class="price-box"><span class="current-price">${p.price} ر.س</span>${p.oldPrice ? `<span style="text-decoration:line-through; color:#999;">${p.oldPrice} ر.س</span>` : ''}</div>
+                    <div style="font-size:0.7rem; color:#6b4f3a;">اضغط للتخصيص</div>
                 </div>
             </div>
         `).join('');
-        document.querySelectorAll('.product-card').forEach(card => { card.addEventListener('click', (e) => { let id = parseInt(card.dataset.id); let product = allProducts.find(p=>p.id===id); if(product) openProductModal(product); }); });
+        document.querySelectorAll('.product-card').forEach(card => {
+            card.addEventListener('click', () => {
+                let id = parseInt(card.dataset.id);
+                let product = allProducts.find(p => p.id === id);
+                if(product) openProductModal(product);
+            });
+        });
     }
 
-    // ============================================================
-    // MODAL
-    // ============================================================
+    // ================================================================
+    // 4. المودال
+    // ================================================================
     let currentProduct = null, selectedColorCircle = '';
     function openProductModal(product) {
         currentProduct = product;
         document.getElementById('modalImg').src = product.img;
         document.getElementById('modalName').innerText = product.name;
-        document.getElementById('modalPrice').innerHTML = `$${product.price}`;
+        document.getElementById('modalPrice').innerHTML = `${product.price} ر.س`;
         let swatchContainer = document.getElementById('modalColorSwatches');
         swatchContainer.innerHTML = '';
-        selectedColorCircle = product.availableColors[0] || 'Default';
+        selectedColorCircle = product.availableColors[0] || 'افتراضي';
         product.availableColors.forEach(color => {
-            let bgColor = color.toLowerCase().replace(/\s/g, '');
-            if(bgColor.includes('terracotta')) bgColor = '#c17a5e';
-            else if(bgColor.includes('olive')) bgColor = '#7b8a5c';
-            else if(bgColor.includes('sand')) bgColor = '#e2cbb5';
-            else if(bgColor.includes('clay')) bgColor = '#b16244';
-            else if(bgColor.includes('beige')) bgColor = '#e6d5b8';
-            else if(bgColor.includes('charcoal')) bgColor = '#4a4a4a';
-            else if(bgColor.includes('oak')) bgColor = '#a57c4c';
-            else if(bgColor.includes('walnut')) bgColor = '#6b4c3b';
-            else if(bgColor.includes('black')) bgColor = '#2c2c2c';
-            else bgColor = '#b8a281';
+            let bgColor = color.includes('تراكوتا') ? '#c17a5e' :
+                          color.includes('زيتوني') ? '#7b8a5c' :
+                          color.includes('رملي') ? '#e2cbb5' :
+                          color.includes('بني') ? '#8B6B4A' :
+                          color.includes('بيج') ? '#e6d5b8' :
+                          color.includes('رمادي') ? '#4a4a4a' :
+                          color.includes('بلوط') ? '#a57c4c' :
+                          color.includes('جوزي') ? '#6b4c3b' :
+                          color.includes('أسود') ? '#2c2c2c' :
+                          '#b8a281';
             let circle = document.createElement('div');
             circle.className = 'color-circle';
             circle.style.backgroundColor = bgColor;
@@ -315,8 +710,14 @@
         document.getElementById('modalNotes').value = '';
         document.getElementById('productModal').classList.add('active');
     }
-    document.getElementById('closeModalBtn').addEventListener('click', () => { document.getElementById('productModal').classList.remove('active'); });
-    document.getElementById('productModal').addEventListener('click', (e) => { if(e.target === document.getElementById('productModal')) document.getElementById('productModal').classList.remove('active'); });
+    document.getElementById('closeModalBtn').addEventListener('click', () => {
+        document.getElementById('productModal').classList.remove('active');
+    });
+    document.getElementById('productModal').addEventListener('click', (e) => {
+        if(e.target === document.getElementById('productModal')) {
+            document.getElementById('productModal').classList.remove('active');
+        }
+    });
     document.getElementById('modalAddToCart').addEventListener('click', () => {
         if(!currentProduct) return;
         let height = document.getElementById('modalHeight').value;
@@ -326,20 +727,107 @@
         document.getElementById('productModal').classList.remove('active');
     });
 
-    // ============================================================
-    // EVENT LISTENERS
-    // ============================================================
-    document.querySelectorAll('.filter-chip').forEach(btn=>btn.addEventListener('click',()=>{ document.querySelectorAll('.filter-chip').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); currentCategory=btn.dataset.cat; renderProducts(); }));
-    document.getElementById('searchInput')?.addEventListener('input',(e)=>{ currentSearch=e.target.value; renderProducts(); });
-    document.getElementById('sortSelect')?.addEventListener('change',(e)=>{ currentSort=e.target.value; renderProducts(); });
-    let slider=document.getElementById('priceSlider'), priceVal=document.getElementById('priceValue'); if(slider){ slider.addEventListener('input',()=>{ maxPrice=parseInt(slider.value); priceVal.innerText=maxPrice; renderProducts(); }); }
-    let cartIcon=document.getElementById('cartIconBtn'), cartSidebar=document.getElementById('cartSidebar'), cartOverlay=document.getElementById('cartOverlay');
-    function openCart(){ cartSidebar.classList.add('open'); cartOverlay.style.opacity='1'; cartOverlay.style.visibility='visible'; }
-    function closeCart(){ cartSidebar.classList.remove('open'); cartOverlay.style.opacity='0'; cartOverlay.style.visibility='hidden'; }
-    cartIcon?.addEventListener('click',openCart); document.getElementById('closeCartBtn')?.addEventListener('click',closeCart); cartOverlay?.addEventListener('click',closeCart);
-    document.getElementById('checkoutBtn')?.addEventListener('click', () => { if(cart.length===0){ showNotification('Cart empty'); return; } window.location.href = 'checkout.html'; });
-    document.getElementById('contactForm')?.addEventListener('submit', (e)=>{ e.preventDefault(); showNotification('Message sent (demo)'); e.target.reset(); });
-    renderProducts(); updateCartUI();
+    // ================================================================
+    // 5. أحداث الفلاتر
+    // ================================================================
+    document.querySelectorAll('.filter-chip').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentCategory = btn.dataset.cat;
+            renderProducts();
+        });
+    });
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+        currentSearch = e.target.value;
+        renderProducts();
+    });
+    document.getElementById('sortSelect').addEventListener('change', (e) => {
+        currentSort = e.target.value;
+        renderProducts();
+    });
+    let slider = document.getElementById('priceSlider'), priceVal = document.getElementById('priceValue');
+    if(slider) {
+        slider.addEventListener('input', () => {
+            maxPrice = parseInt(slider.value);
+            priceVal.innerText = maxPrice;
+            renderProducts();
+        });
+    }
+
+    // ================================================================
+    // 6. السلة الجانبية
+    // ================================================================
+    let cartIcon = document.getElementById('cartIconBtn'), cartSidebar = document.getElementById('cartSidebar'), cartOverlay = document.getElementById('cartOverlay');
+    function openCart() { cartSidebar.classList.add('open'); cartOverlay.style.opacity = '1'; cartOverlay.style.visibility = 'visible'; }
+    function closeCart() { cartSidebar.classList.remove('open'); cartOverlay.style.opacity = '0'; cartOverlay.style.visibility = 'hidden'; }
+    cartIcon?.addEventListener('click', openCart);
+    document.getElementById('closeCartBtn')?.addEventListener('click', closeCart);
+    cartOverlay?.addEventListener('click', closeCart);
+    document.getElementById('checkoutBtn')?.addEventListener('click', () => {
+        if(cart.length === 0) { showNotification('السلة فارغة'); return; }
+        window.location.href = 'checkout.html';
+    });
+
+    // ================================================================
+    // 7. القائمة للجوال
+    // ================================================================
+    document.getElementById('menuToggle').addEventListener('click', () => {
+        document.getElementById('navLinks').classList.toggle('open');
+    });
+    document.querySelectorAll('#navLinks a').forEach(link => {
+        link.addEventListener('click', () => {
+            document.getElementById('navLinks').classList.remove('open');
+        });
+    });
+
+    // ================================================================
+    // 8. نموذج التواصل في الفوتر (إرسال رسالة)
+    // ================================================================
+    document.getElementById('footerContactForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const name = document.getElementById('footerName').value.trim();
+        const email = document.getElementById('footerEmail').value.trim();
+        const message = document.getElementById('footerMessage').value.trim();
+        const msgDiv = document.getElementById('footerFormMsg');
+
+        if (!name || !email || !message) {
+            msgDiv.style.display = 'block';
+            msgDiv.style.color = '#FFB3B3';
+            msgDiv.innerText = '❌ الرجاء ملء جميع الحقول.';
+            return;
+        }
+
+        // حفظ الرسالة في localStorage
+        let messages = JSON.parse(localStorage.getItem('بيتي_رسائل_الموقع')) || [];
+        messages.push({
+            id: Date.now(),
+            name: name,
+            email: email,
+            message: message,
+            date: new Date().toISOString(),
+            status: 'unread'
+        });
+        localStorage.setItem('بيتي_رسائل_الموقع', JSON.stringify(messages));
+
+        // محاكاة إرسال البريد (يمكنك تفعيل FormSubmit لاحقاً)
+        // fetch('https://formsubmit.co/ajax/youremail@gmail.com', { ... });
+
+        msgDiv.style.display = 'block';
+        msgDiv.style.color = '#A8D5BA';
+        msgDiv.innerText = '✅ تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.';
+        this.reset();
+
+        setTimeout(() => {
+            msgDiv.style.display = 'none';
+        }, 5000);
+    });
+
+    // ================================================================
+    // 9. التحميل الأولي
+    // ================================================================
+    renderProducts();
+    updateCartUI();
 </script>
 </body>
 </html>
