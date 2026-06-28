@@ -113,6 +113,15 @@
             }
             .nav-links.open { display: flex; }
             .navbar .logo img { height: 40px; }
+            .logo-wrapper {
+                display: flex;
+                align-items:  center;
+                justify-content: center;
+                gap: 1.5rem;
+                padding: 0.5rem 1rem;
+                flex-wrap: wrap;
+            }
+
         }
 
         /* ====== الهيرو ====== */
@@ -389,7 +398,7 @@
 <!-- ====== القائمة العلوية ====== -->
 <nav class="navbar">
     <div class="logo">
-        <img src="WhatsApp Image 2026-06-27 at 14.07.47.jpeg" alt="بيتي على ذوقي" style="height: 55px;">
+        <img src="logo.png" alt="بيتي على ذوقي" style="height: 55px;">
     </div>
     <button class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></button>
     <div class="nav-links" id="navLinks">
@@ -567,6 +576,9 @@
         toast.style.transform = 'translateX(0%)';
         setTimeout(() => toast.style.transform = 'translateX(200%)', 2500);
     }
+
+
+
     function updateCartUI() {
         let count = cart.reduce((s,i) => s + i.qty, 0);
         document.getElementById('cartCount').innerText = count;
